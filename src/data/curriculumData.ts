@@ -595,57 +595,104 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
   },
 ];
 
-// Achievements for gamification
+// Full 10 Achievements and Badges System
 export const ACHIEVEMENTS_LIST: AchievementBadge[] = [
   {
-    id: 'first_step',
-    title: 'الخطوة الأولى في الكيمياء',
-    description: 'أكملت أول درس بنجاح في المنصة',
-    icon: '🧪',
-    pointsRequired: 50,
+    id: 'chemistry_beginner',
+    title: 'مبتدئ الكيمياء',
+    description: 'احصل على أول 100 نقطة في مسيرتك التعليمية',
+    icon: '🌱',
+    pointsRequired: 100,
+    conditionDescription: 'تجميع 100 نقطة XP',
     unlocked: false,
   },
   {
-    id: 'collision_expert',
-    title: 'خبير نظرية التصادم',
-    description: 'أجريت تجارب التصادم وفهمت شروط التفاعل الفعال',
-    icon: '💥',
-    pointsRequired: 150,
-    unlocked: false,
-  },
-  {
-    id: 'le_chatelier_master',
-    title: 'عبقري لوشاتلييه',
-    description: 'أتقنت التنبؤ باتجاه انزياح الاتزان تحت تأثير المؤثرات',
-    icon: '⚖️',
-    pointsRequired: 300,
-    unlocked: false,
-  },
-  {
-    id: 'ph_guru',
-    title: 'خبير الرقم الهيدروجيني',
-    description: 'أتقنت حسابات وتطبيقات مقياس pH والأيونات',
-    icon: '📊',
+    id: 'chemistry_expert',
+    title: 'خبير الكيمياء',
+    description: 'تجاوز 500 نقطة من خلال إنهاء الدروس والتجارب',
+    icon: '🔬',
     pointsRequired: 500,
+    conditionDescription: 'تجميع 500 نقطة XP',
     unlocked: false,
   },
   {
-    id: 'titration_pro',
-    title: 'كيميائي المعايرة الدقيق',
-    description: 'أنجزت تجربة المعايرة الافتراضية بدقة تتجاوز 95%',
-    icon: '🏆',
-    pointsRequired: 750,
-    unlocked: false,
-  },
-  {
-    id: 'yemen_chem_genius',
-    title: 'عبقري الكيمياء اليمني',
-    description: 'حصلت على أكثر من 1000 نقطة وتفوقت في جميع الاختبارات',
-    icon: '👑',
+    id: 'chemistry_genius',
+    title: 'عبقري الكيمياء',
+    description: 'أعلى رتبة علمية بعد اجتياز حاجز 1000 نقطة',
+    icon: '🧠',
     pointsRequired: 1000,
+    conditionDescription: 'تجميع 1000 نقطة XP',
+    unlocked: false,
+  },
+  {
+    id: 'equilibrium_master',
+    title: 'سيد الاتزان',
+    description: 'أكملت جميع دروس وتمارين الوحدة السابعة بنجاح',
+    icon: '⚖️',
+    conditionDescription: 'إكمال 100% من الوحدة السابعة',
+    unlocked: false,
+  },
+  {
+    id: 'ionic_expert',
+    title: 'خبير الأيونات',
+    description: 'أتقنت مفاهيم الاتزان الأيوني وحسابات pH في الوحدة الثامنة',
+    icon: '⚛️',
+    conditionDescription: 'إكمال 100% من الوحدة الثامنة',
+    unlocked: false,
+  },
+  {
+    id: 'perfect_score',
+    title: 'درجة مثالية',
+    description: 'حصلت على العلامة الكاملة في أحد اختبارات التقييم',
+    icon: '⭐',
+    conditionDescription: 'الحصول على علامة كاملة في الاختبار',
+    unlocked: false,
+  },
+  {
+    id: 'titration_master',
+    title: 'سيد المعايرة',
+    description: 'حققت نسبة دقة تجاوزت 95% في تجربة المعايرة الافتراضية',
+    icon: '🧪',
+    conditionDescription: 'دقة معملية ≥ 95%',
+    unlocked: false,
+  },
+  {
+    id: 'speed_demon',
+    title: 'سريع البديهة',
+    description: 'أجبت على أسئلة الاختبار بتركيز وسرعة فائقة',
+    icon: '⚡',
+    conditionDescription: 'الإجابة السريعة والدقيقة',
+    unlocked: false,
+  },
+  {
+    id: 'consistency_king',
+    title: 'صاحب الاتساق',
+    description: 'حافظت على أداء ممتاز وثابت في 5 أنشطة متتالية',
+    icon: '🏆',
+    conditionDescription: '5 اختبارات متتالية بتفوق',
+    unlocked: false,
+  },
+  {
+    id: 'perfect_week',
+    title: 'أسبوع مثالي',
+    description: 'المتابعة اليومية والاجتهاد الأكاديمي المتواصل',
+    icon: '📅',
+    conditionDescription: 'انتظام دراسي كامل',
     unlocked: false,
   },
 ];
+
+// Sample Leaderboard of Yemeni Grade 11 Chemistry Students
+export const SAMPLE_LEADERBOARD = [
+  { id: 'st_1', rank: 1, name: 'أحمد نبيل العولقي', class: 'ثاني ثانوي (أ)', totalPoints: 1250, unit7Points: 620, unit8Points: 630, medal: '🥇' },
+  { id: 'st_2', rank: 2, name: 'فاطمة محمد باوزير', class: 'ثاني ثانوي (ب)', totalPoints: 1180, unit7Points: 590, unit8Points: 590, medal: '🥈' },
+  { id: 'st_3', rank: 3, name: 'ياسر خالد الصبري', class: 'ثاني ثانوي (أ)', totalPoints: 1040, unit7Points: 520, unit8Points: 520, medal: '🥉' },
+  { id: 'st_4', rank: 4, name: 'مروة عبد الرحمن الكاف', class: 'ثاني ثانوي (ج)', totalPoints: 950, unit7Points: 480, unit8Points: 470 },
+  { id: 'st_5', rank: 5, name: 'عمر سلطان الحكيمي', class: 'ثاني ثانوي (ب)', totalPoints: 890, unit7Points: 460, unit8Points: 430 },
+  { id: 'st_6', rank: 6, name: 'أروى طلال المقطري', class: 'ثاني ثانوي (أ)', totalPoints: 820, unit7Points: 410, unit8Points: 410 },
+  { id: 'st_7', rank: 7, name: 'بلال مطهر الشامي', class: 'ثاني ثانوي (ج)', totalPoints: 780, unit7Points: 400, unit8Points: 380 },
+];
+
 
 // Interactive Quiz Questions bank
 export const QUIZ_QUESTIONS: QuizQuestion[] = [

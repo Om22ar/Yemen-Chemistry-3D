@@ -2,6 +2,8 @@
 
 export type UnitId = 7 | 8;
 
+export type ActiveTab = 'lessons' | 'kinetics' | 'titration' | 'calculator' | 'quiz' | 'dashboard';
+
 export type InteractiveType =
   | 'kinetics'
   | 'collision_theory'
@@ -12,7 +14,8 @@ export type InteractiveType =
   | 'acid_base'
   | 'ph_scale'
   | 'buffer_solution'
-  | 'titration_lab';
+  | 'titration_lab'
+  | 'calculator';
 
 export interface DefinitionItem {
   term: string;
@@ -52,7 +55,7 @@ export interface TitrationExperimentConfig {
   analyteFormula: string;
   analyteType: 'acid' | 'base';
   analyteVolumeMl: number;
-  analyteMolarity: number; // Known to engine, student calculates or discovers it
+  analyteMolarity: number;
   titrantName: string;
   titrantFormula: string;
   titrantMolarity: number;
@@ -86,8 +89,30 @@ export interface AchievementBadge {
   title: string;
   description: string;
   icon: string;
-  pointsRequired: number;
+  pointsRequired?: number;
+  conditionDescription: string;
   unlocked: boolean;
+}
+
+export interface LeaderboardStudent {
+  id: string;
+  rank: number;
+  name: string;
+  class: string;
+  totalPoints: number;
+  unit7Points: number;
+  unit8Points: number;
+  medal?: string;
+  isCurrentUser?: boolean;
+}
+
+export interface RecommendationItem {
+  type: 'review' | 'challenge';
+  topic: string;
+  reason: string;
+  recommendedLessonId: string;
+  recommendedLessonTitle: string;
+  priority: 'high' | 'medium';
 }
 
 export type QuizQuestionType =
@@ -106,12 +131,10 @@ export interface QuizQuestion {
   correctAnswer: string | number;
   explanation: string;
   formulaSteps?: string[];
-  // For equation balancing
   equationParts?: {
     reactants: { formula: string; defaultCoeff?: number; correctCoeff: number }[];
     products: { formula: string; defaultCoeff?: number; correctCoeff: number }[];
   };
-  // For simulation prediction
   simulationContext?: {
     system: string;
     disturbance: string;

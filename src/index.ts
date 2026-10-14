@@ -6,6 +6,8 @@ import { KineticsView } from './components/KineticsView';
 import { TitrationView } from './components/TitrationView';
 import { QuizView } from './components/QuizView';
 import { DashboardView } from './components/DashboardView';
+import { ChemistryCalculatorView } from './components/ChemistryCalculatorView';
+import { FloatingCalcModal } from './components/FloatingCalcModal';
 import { CURRICULUM_LESSONS } from './data/curriculumData';
 import { StorageService } from './services/firebase';
 import type { LessonContent } from './types';
@@ -21,6 +23,7 @@ class YemenChemistryApp {
   private activeViewDisposer: (() => void) | null = null;
   private sidebar: CurriculumSidebar | null = null;
   private lessonViewer: LessonViewer | null = null;
+  private floatingCalc: FloatingCalcModal;
 
   constructor() {
     const rootEl = document.getElementById('root');
@@ -42,6 +45,12 @@ class YemenChemistryApp {
     this.mainContainer = document.createElement('div');
     this.mainContainer.className = 'flex-1 flex overflow-hidden w-full relative';
     this.root.appendChild(this.mainContainer);
+
+    // Floating Quick Calculator Tool
+    this.floatingCalc = new FloatingCalcModal(document.body);
+    this.floatingCalc.onOpenFullCalculator(() => {
+      this.switchTab('calculator');
+    });
 
     // Initial View
     this.renderCurrentTab();
@@ -87,6 +96,9 @@ class YemenChemistryApp {
       case 'titration':
         this.renderTitrationTab();
         break;
+      case 'calculator':
+        this.renderCalculatorTab();
+        break;
       case 'quiz':
         this.renderQuizTab();
         break;
@@ -129,6 +141,11 @@ class YemenChemistryApp {
 
   private renderTitrationTab() {
     const view = new TitrationView(this.mainContainer);
+    this.activeViewDisposer = () => view.dispose();
+  }
+
+  private renderCalculatorTab() {
+    const view = new ChemistryCalculatorView(this.mainContainer);
     this.activeViewDisposer = () => view.dispose();
   }
 

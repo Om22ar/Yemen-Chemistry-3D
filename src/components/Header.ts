@@ -1,7 +1,7 @@
 import { StorageService } from '../services/firebase';
 import type { StudentProfile } from '../types';
 
-export type ActiveTab = 'lessons' | 'kinetics' | 'titration' | 'quiz' | 'dashboard';
+export type ActiveTab = 'lessons' | 'kinetics' | 'titration' | 'calculator' | 'quiz' | 'dashboard';
 
 export class HeaderComponent {
   private element: HTMLElement;
@@ -20,7 +20,7 @@ export class HeaderComponent {
 
     this.element = document.createElement('header');
     this.element.className =
-      'sticky top-0 z-40 bg-white/95 border-b border-slate-200 px-4 lg:px-8 py-3 flex items-center justify-between gap-4 shadow-xs';
+      'sticky top-0 z-40 bg-white/95 border-b border-slate-200 px-3 sm:px-6 py-2.5 flex items-center justify-between gap-2 sm:gap-4 shadow-xs';
     container.appendChild(this.element);
 
     StorageService.subscribe((updatedProfile) => {
@@ -38,53 +38,60 @@ export class HeaderComponent {
 
   private render() {
     this.element.innerHTML = `
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-4 lg:gap-6">
         <!-- Brand Logo -->
-        <div class="flex items-center gap-3 cursor-pointer" id="brand-logo">
-          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md text-xl">
+        <div class="flex items-center gap-2.5 cursor-pointer" id="brand-logo">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-md text-lg sm:text-xl">
             ⚗️
           </div>
           <div>
-            <div class="font-bold text-slate-900 text-lg tracking-tight leading-tight">
+            <div class="font-bold text-slate-900 text-base sm:text-lg tracking-tight leading-tight">
               كيمياء اليمن 3D
             </div>
-            <div class="text-xs text-slate-500 font-medium">
+            <div class="text-[11px] sm:text-xs text-slate-500 font-medium hidden sm:block">
               الصف الثاني الثانوي العلمي · الوحدتان 7 و 8
             </div>
           </div>
         </div>
 
-        <!-- Navigation Tabs -->
-        <nav class="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-sm font-medium">
-          <button data-tab="lessons" class="tab-btn px-3.5 py-1.5 rounded-lg transition-all ${
+        <!-- Navigation Tabs (Desktop & Tablet) -->
+        <nav class="hidden lg:flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs xl:text-sm font-medium">
+          <button data-tab="lessons" class="tab-btn px-3 py-1.5 rounded-lg transition-all ${
             this.currentTab === 'lessons'
               ? 'bg-white text-sky-700 shadow-xs font-semibold'
               : 'text-slate-600 hover:text-slate-900'
           }">
             📚 الدروس
           </button>
-          <button data-tab="kinetics" class="tab-btn px-3.5 py-1.5 rounded-lg transition-all ${
+          <button data-tab="kinetics" class="tab-btn px-3 py-1.5 rounded-lg transition-all ${
             this.currentTab === 'kinetics'
               ? 'bg-white text-sky-700 shadow-xs font-semibold'
               : 'text-slate-600 hover:text-slate-900'
           }">
             ⚛️ محاكاة التصادم والاتزان
           </button>
-          <button data-tab="titration" class="tab-btn px-3.5 py-1.5 rounded-lg transition-all ${
+          <button data-tab="titration" class="tab-btn px-3 py-1.5 rounded-lg transition-all ${
             this.currentTab === 'titration'
               ? 'bg-white text-sky-700 shadow-xs font-semibold'
               : 'text-slate-600 hover:text-slate-900'
           }">
-            🧪 معمل المعايرة الافتراضي
+            🧪 معمل المعايرة
           </button>
-          <button data-tab="quiz" class="tab-btn px-3.5 py-1.5 rounded-lg transition-all ${
+          <button data-tab="calculator" class="tab-btn px-3 py-1.5 rounded-lg transition-all ${
+            this.currentTab === 'calculator'
+              ? 'bg-white text-sky-700 shadow-xs font-semibold'
+              : 'text-slate-600 hover:text-slate-900'
+          }">
+            🧮 حاسبة الكيمياء
+          </button>
+          <button data-tab="quiz" class="tab-btn px-3 py-1.5 rounded-lg transition-all ${
             this.currentTab === 'quiz'
               ? 'bg-white text-sky-700 shadow-xs font-semibold'
               : 'text-slate-600 hover:text-slate-900'
           }">
             📝 الاختبار الذاتي
           </button>
-          <button data-tab="dashboard" class="tab-btn px-3.5 py-1.5 rounded-lg transition-all ${
+          <button data-tab="dashboard" class="tab-btn px-3 py-1.5 rounded-lg transition-all ${
             this.currentTab === 'dashboard'
               ? 'bg-white text-sky-700 shadow-xs font-semibold'
               : 'text-slate-600 hover:text-slate-900'
@@ -92,16 +99,28 @@ export class HeaderComponent {
             📊 لوحة التقدم
           </button>
         </nav>
+
+        <!-- Mobile Navigation Select -->
+        <div class="lg:hidden">
+          <select id="mobile-nav-select" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs font-semibold rounded-lg px-2 py-1.5 focus:ring-2 focus:ring-sky-500 cursor-pointer">
+            <option value="lessons" ${this.currentTab === 'lessons' ? 'selected' : ''}>📚 الدروس</option>
+            <option value="kinetics" ${this.currentTab === 'kinetics' ? 'selected' : ''}>⚛️ محاكاة التصادم والاتزان</option>
+            <option value="titration" ${this.currentTab === 'titration' ? 'selected' : ''}>🧪 معمل المعايرة</option>
+            <option value="calculator" ${this.currentTab === 'calculator' ? 'selected' : ''}>🧮 حاسبة الكيمياء</option>
+            <option value="quiz" ${this.currentTab === 'quiz' ? 'selected' : ''}>📝 الاختبار الذاتي</option>
+            <option value="dashboard" ${this.currentTab === 'dashboard' ? 'selected' : ''}>📊 لوحة التقدم</option>
+          </select>
+        </div>
       </div>
 
       <!-- User Stats & Auth -->
       <div class="flex items-center gap-3">
         <!-- Points & Level Badge -->
-        <div class="flex items-center gap-2 bg-amber-50 border border-amber-200/80 px-3 py-1.5 rounded-xl cursor-pointer hover:bg-amber-100 transition-colors" id="btn-open-dashboard">
+        <div class="flex items-center gap-2 bg-amber-50 border border-amber-200/80 px-2.5 sm:px-3 py-1.5 rounded-xl cursor-pointer hover:bg-amber-100 transition-colors" id="btn-open-dashboard">
           <span class="text-amber-500 font-bold">⭐</span>
-          <span class="font-mono-numbers font-bold text-amber-900 text-sm">${this.profile.totalPoints}</span>
-          <span class="text-xs text-amber-700 font-medium">نقطة</span>
-          <span class="text-xs bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded-md font-semibold">مستوى ${this.profile.level}</span>
+          <span class="font-mono-numbers font-bold text-amber-900 text-xs sm:text-sm">${this.profile.totalPoints}</span>
+          <span class="text-[11px] text-amber-700 font-medium hidden sm:inline">نقطة</span>
+          <span class="text-[10px] sm:text-xs bg-amber-200 text-amber-900 px-1.5 py-0.5 rounded-md font-semibold">مستوى ${this.profile.level}</span>
         </div>
 
         <!-- Google Auth or Guest -->
@@ -141,6 +160,13 @@ export class HeaderComponent {
           this.onTabChange(target);
         }
       });
+    });
+
+    this.element.querySelector('#mobile-nav-select')?.addEventListener('change', (e) => {
+      const target = (e.target as HTMLSelectElement).value as ActiveTab;
+      if (target) {
+        this.onTabChange(target);
+      }
     });
 
     this.element.querySelector('#brand-logo')?.addEventListener('click', () => {
