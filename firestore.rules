@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 1. Global Default-Deny Catch-All
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // User Profile Validation
+    function isValidUser(data) {
+      return data.id is string &&
+             data.displayName is string && data.displayName.size() <= 100 &&
+             data.totalPoints is number && data.totalPoints >= 0 &&
+             data.level is number && data.level >= 1;
+    }
+
+    // Quiz Attempt Validation
+    function isValidQuizAttempt(data, userId) {
+      return data.id is string &&
+             data.userId == userId &&
+             data.unitId is number &&
+             data.score is number && data.score >= 0 &&
+             data.totalQuestions is number && data.totalQuestions > 0;
+    }
+
+    // Lab Record Validation
+    function isValidLabRecord(data, userId) {
+      return data.id is string &&
+             data.userId == userId &&
+             data.experimentType is string && data.experimentType.size() <= 60 &&
+             data.accuracyPercentage is number &&
+             data.dropsCount is number && data.dropsCount >= 0;
+    }
+
+    // Student profile match
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow list: if false; // Deny broad scraping
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().id == userId;
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().id == userId;
+      allow delete: if isOwner(userId);
+
+      // Quiz Attempts sub-collection
+      match /quiz_attempts/{attemptId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(attemptId) && isValidQuizAttempt(incoming(), userId);
+        allow update: if isOwner(userId) && isValidId(attemptId) && isValidQuizAttempt(incoming(), userId);
+        allow delete: if isOwner(userId);
+      }
+
+      // Lab Records sub-collection
+      match /lab_records/{recordId} {
+        allow get, list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(recordId) && isValidLabRecord(incoming(), userId);
+        allow update: if isOwner(userId) && isValidId(recordId) && isValidLabRecord(incoming(), userId);
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}

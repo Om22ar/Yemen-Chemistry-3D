@@ -1,0 +1,67 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Student profile for Yemen Chemistry 3D platform",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "displayName": { "type": "string", "maxLength": 100 },
+        "email": { "type": "string", "maxLength": 150 },
+        "totalPoints": { "type": "number" },
+        "level": { "type": "number" },
+        "completedLessons": { "type": "array" },
+        "achievements": { "type": "array" },
+        "mistakeLog": { "type": "object" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["id", "displayName", "totalPoints", "level"]
+    },
+    "QuizAttempt": {
+      "title": "QuizAttempt",
+      "description": "Recorded chemistry quiz score and statistics",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "unitId": { "type": "number" },
+        "score": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "percentage": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "unitId", "score", "totalQuestions"]
+    },
+    "LabRecord": {
+      "title": "LabRecord",
+      "description": "Virtual titration laboratory experiment session",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "experimentType": { "type": "string", "maxLength": 60 },
+        "calculatedMolarity": { "type": "number" },
+        "actualMolarity": { "type": "number" },
+        "accuracyPercentage": { "type": "number" },
+        "dropsCount": { "type": "number" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "userId", "experimentType", "accuracyPercentage", "dropsCount"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Individual student profile and gamification status"
+    },
+    "/users/{userId}/quiz_attempts/{attemptId}": {
+      "schema": "QuizAttempt",
+      "description": "Log of completed chemistry unit quizzes"
+    },
+    "/users/{userId}/lab_records/{recordId}": {
+      "schema": "LabRecord",
+      "description": "History of virtual titration experiments conducted by student"
+    }
+  }
+}
