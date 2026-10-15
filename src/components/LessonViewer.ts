@@ -1,23 +1,27 @@
 import { StorageService } from '../services/firebase';
 import type { LessonContent, StudentProfile } from '../types';
+import { renderStudentFriendlyFormula, formatMathHtml } from '../utils/formulaFormatter';
 
 export class LessonViewer {
   private element: HTMLElement;
   private currentLesson: LessonContent;
   private onLaunchSimulation: (type: string) => void;
+  private onOpenCurriculumDrawer?: () => void;
   private profile: StudentProfile;
 
   constructor(
     container: HTMLElement,
     initialLesson: LessonContent,
-    onLaunchSimulation: (type: string) => void
+    onLaunchSimulation: (type: string) => void,
+    onOpenCurriculumDrawer?: () => void
   ) {
     this.currentLesson = initialLesson;
     this.onLaunchSimulation = onLaunchSimulation;
+    this.onOpenCurriculumDrawer = onOpenCurriculumDrawer;
     this.profile = StorageService.getLocalProfile();
 
     this.element = document.createElement('main');
-    this.element.className = 'flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full';
+    this.element.className = 'flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 max-w-4xl mx-auto w-full';
     container.appendChild(this.element);
 
     StorageService.subscribe((updatedProfile) => {
@@ -31,6 +35,7 @@ export class LessonViewer {
   public setLesson(lesson: LessonContent) {
     this.currentLesson = lesson;
     this.render();
+    this.element.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
   private updateCompletionState() {
@@ -45,7 +50,7 @@ export class LessonViewer {
       } else {
         btn.innerHTML = '<span>⭐</span> <span>تعليم الدرس كمكتمل (+50 نقطة XP)</span>';
         btn.className =
-          'w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-xs flex items-center justify-center gap-2';
+          'w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white font-bold px-5 py-2.5 rounded-xl text-sm transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer';
         btn.disabled = false;
       }
     }
@@ -55,17 +60,24 @@ export class LessonViewer {
     const isCompleted = this.profile.completedLessons.includes(this.currentLesson.id);
 
     this.element.innerHTML = `
-      <div class="space-y-6">
+      <div class="space-y-5 sm:space-y-6">
         <!-- Top Breadcrumb & Metadata -->
-        <div class="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-200">
-          <div class="flex items-center gap-2 text-xs text-slate-500 font-medium">
-            <span>${this.currentLesson.unitTitle}</span>
-            <span>/</span>
-            <span class="text-slate-800 font-bold">الدرس ${this.currentLesson.id}</span>
+        <div class="flex flex-wrap items-center justify-between gap-2.5 pb-3 sm:pb-4 border-b border-slate-200">
+          <div class="flex items-center gap-2">
+            <!-- Mobile Open Curriculum Drawer Button -->
+            <button id="btn-mobile-curriculum" class="lg:hidden flex items-center gap-1.5 bg-sky-50 hover:bg-sky-100 active:scale-95 text-sky-800 text-xs font-bold px-3 py-1.5 rounded-xl border border-sky-200 transition-all cursor-pointer shadow-2xs">
+              <span>📖</span>
+              <span>فهرس الدروس</span>
+            </button>
+            <div class="hidden sm:flex items-center gap-2 text-xs text-slate-500 font-medium">
+              <span>${this.currentLesson.unitTitle}</span>
+              <span>/</span>
+              <span class="text-slate-800 font-bold">الدرس ${this.currentLesson.id}</span>
+            </div>
           </div>
           <div class="flex items-center gap-2 text-xs text-slate-500">
-            <span>⏱️ مدة القراءة التقديرية:</span>
-            <span class="font-mono font-bold text-slate-700">${this.currentLesson.readingTimeMin} دقائق</span>
+            <span>⏱️ مدة القراءة:</span>
+            <span class="font-mono font-bold text-slate-700">${this.currentLesson.readingTimeMin} دقيقة</span>
           </div>
         </div>
 
@@ -138,12 +150,12 @@ export class LessonViewer {
                 </div>
                 ${
                   def.chemicalFormula
-                    ? `<div class="bg-white px-3 py-1.5 rounded-lg border border-slate-200 inline-block font-mono text-xs font-semibold text-indigo-700 dir-ltr">${def.chemicalFormula}</div>`
+                    ? renderStudentFriendlyFormula(def.chemicalFormula, def.term)
                     : ''
                 }
                 ${
                   def.example
-                    ? `<div class="text-xs text-slate-500 font-mono mt-1"><span class="font-sans text-slate-400">مثال:</span> ${def.example}</div>`
+                    ? `<div class="text-xs text-slate-600 font-mono mt-1.5 p-2 bg-slate-100/70 rounded-lg border border-slate-200/80"><span class="font-sans text-slate-500 font-semibold">مثال توضيحي:</span> <span class="dir-ltr inline-block font-bold text-slate-800">${formatMathHtml(def.example)}</span></div>`
                     : ''
                 }
               </div>
@@ -165,8 +177,8 @@ export class LessonViewer {
                 (law) => `
               <div class="p-5 rounded-xl bg-gradient-to-br from-slate-50 to-indigo-50/30 border border-indigo-100">
                 <div class="font-bold text-sm text-indigo-950 mb-2">${law.name}</div>
-                <div class="bg-white p-3 rounded-xl border border-indigo-200 text-center font-mono font-bold text-base sm:text-lg text-indigo-700 shadow-2xs mb-3 dir-ltr">
-                  ${law.formula}
+                <div class="bg-white p-3.5 rounded-xl border border-indigo-200 text-center font-mono font-bold text-base sm:text-lg text-indigo-700 shadow-2xs mb-3 dir-ltr">
+                  ${formatMathHtml(law.formula)}
                 </div>
                 <p class="text-xs sm:text-sm text-slate-600 mb-3">${law.description}</p>
                 
@@ -261,6 +273,10 @@ export class LessonViewer {
     `;
 
     // Event listeners
+    this.element.querySelector('#btn-mobile-curriculum')?.addEventListener('click', () => {
+      this.onOpenCurriculumDrawer?.();
+    });
+
     this.element.querySelector('#btn-launch-sim')?.addEventListener('click', () => {
       this.onLaunchSimulation(this.currentLesson.relatedSimulation);
     });

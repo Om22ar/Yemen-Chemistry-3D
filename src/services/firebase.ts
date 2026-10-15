@@ -8,6 +8,7 @@ import {
   type User,
 } from 'firebase/auth';
 import {
+  initializeFirestore,
   getFirestore,
   doc,
   getDoc,
@@ -61,7 +62,21 @@ export function handleFirestoreError(
 
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
-export const db: Firestore = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+
+let dbInstance: Firestore;
+try {
+  dbInstance = initializeFirestore(
+    app,
+    {
+      experimentalAutoDetectLongPolling: true,
+    },
+    firebaseConfig.firestoreDatabaseId
+  );
+} catch {
+  dbInstance = getFirestore(app, firebaseConfig.firestoreDatabaseId);
+}
+
+export const db: Firestore = dbInstance;
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
@@ -170,7 +185,7 @@ export class StorageService {
           isGuest: false,
           updatedAt: new Date().toISOString(),
         };
-        await setDoc(ref, newProfile);
+        await setDoc(ref, { ...newProfile, id: user.uid });
         this.saveLocalProfile(newProfile);
         return newProfile;
       }
@@ -205,7 +220,7 @@ export class StorageService {
       const path = `users/${auth.currentUser.uid}`;
       try {
         const ref = doc(db, 'users', auth.currentUser.uid);
-        await setDoc(ref, updated, { merge: true });
+        await setDoc(ref, { ...updated, id: auth.currentUser.uid }, { merge: true });
       } catch (err) {
         console.warn('Failed to sync profile update to cloud:', err);
       }

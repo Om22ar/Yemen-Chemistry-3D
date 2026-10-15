@@ -120,8 +120,8 @@ export class QuizView {
           }
 
           <!-- Bottom Action Buttons -->
-          <div class="flex items-center justify-between gap-3 pt-4 border-t border-slate-100">
-            <button id="btn-prev-q" ${this.currentIndex === 0 ? 'disabled' : ''} class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none transition-colors">
+          <div class="flex flex-wrap items-center justify-between gap-2.5 sm:gap-3 pt-3 sm:pt-4 border-t border-slate-100">
+            <button id="btn-prev-q" ${this.currentIndex === 0 ? 'disabled' : ''} class="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 disabled:opacity-40 disabled:pointer-events-none transition-colors cursor-pointer">
               ← السؤال السابق
             </button>
 
@@ -129,18 +129,18 @@ export class QuizView {
               ${
                 !isSubmitted
                   ? `
-                <button id="btn-submit-q" class="px-5 py-2 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 text-white shadow-xs transition-all">
+                <button id="btn-submit-q" class="px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-bold bg-sky-600 hover:bg-sky-700 active:scale-95 text-white shadow-xs transition-all cursor-pointer">
                   التحقق من إجابتي
                 </button>
               `
                   : `
-                <button id="btn-retry-q" class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors">
+                <button id="btn-retry-q" class="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors cursor-pointer">
                   إعادة المحاولة
                 </button>
               `
               }
 
-              <button id="btn-next-q" ${this.currentIndex === total - 1 ? 'disabled' : ''} class="px-4 py-2 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-all">
+              <button id="btn-next-q" ${this.currentIndex === total - 1 ? 'disabled' : ''} class="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-bold bg-slate-900 text-white hover:bg-slate-800 disabled:opacity-40 disabled:pointer-events-none transition-all cursor-pointer">
                 السؤال التالي →
               </button>
             </div>

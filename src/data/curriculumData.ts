@@ -22,13 +22,13 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
         term: 'التفاعلات التامة (غير الانعكاسية)',
         definition:
           'تفاعلات كيميائية تسير في اتجاه واحد نحو تكوّن النواتج حتى استهلاك أحد المتفاعلات كلياً، ولا تستطيع النواتج الاتحاد مجدداً لتكوين المتفاعلات (مثل احتراق الماغنسيوم في الهواء).',
-        example: '2Mg + O_2 \\to 2MgO',
+        example: '2Mg + O₂ → 2MgO',
       },
       {
         term: 'التفاعلات غير التامة (الانعكاسية / العكوسة)',
         definition:
           'تفاعلات تسير في كلا الاتجاهين (الأمامي والعكسي) في وعاء مغلق؛ حيث تتفاعل المواد المتفاعلة لتعطي نواتج، وفي الوقت ذاته تتحد النواتج لتعيد تكوين المتفاعلات حتى الوصول لحالة الاتزان.',
-        example: 'N_2(g) + 3H_2(g) \\rightleftharpoons 2NH_3(g)',
+        example: 'N₂(g) + 3H₂(g) ⇌ 2NH₃(g)',
       },
     ],
     keyLaws: [
@@ -151,7 +151,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'معادلة أرينيوس (Arrhenius Equation)',
-        formula: 'k = A \\cdot e^{-\\frac{E_a}{R \\cdot T}}',
+        formula: 'k = A · e^(-Ea / (R·T))',
         description: 'توضح المعادلة العلاقة الأسية بين ثابت سرعة التفاعل k ودرجة الحرارة المطلقة T وطاقة التنشيط Ea.',
         variables: [
           { symbol: 'k', meaning: 'ثابت سرعة التفاعل' },
@@ -210,7 +210,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'العلاقة بين ثابت الاتزان والضغوط الجزئية Kp',
-        formula: 'K_p = K_c \\cdot (R \\cdot T)^{\\Delta n}',
+        formula: 'Kp = Kc · (R · T)^Δn',
         description: 'تربط بين ثابت الاتزان بالضغوط Kp وثابت الاتزان بالتراكيز Kc للأنظمة الغازية.',
         variables: [
           { symbol: 'Kp', meaning: 'ثابت الاتزان بدلالة الضغوط الجزئية' },
@@ -260,7 +260,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'قواعد انزياح الاتزان حسب المؤثر',
-        formula: 'مؤثر خارجي \\to انزياح معاكس لمقاومة التغير',
+        formula: 'مؤثر خارجي → انزياح معاكس لمقاومة التغير',
         description: 'ملخص تأثير العوامل المختلفة على موضع الاتزان وقيمة ثابت الاتزان Kc:',
         variables: [
           { symbol: 'زيادة تركيز مادة', meaning: 'ينزاح التفاعل في الاتجاه المعاكس لاستهلاك الزيادة (Kc لا يتغير)' },
@@ -302,13 +302,13 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
         term: 'الإلكتروليت القوي (Strong Electrolyte)',
         definition:
           'مادة تتأين في المحلول المائي تأيناً تاماً بنسبة 100% إلى أيونات، مثل الأحماض القوية (HCl, HNO3) والقواعد القوية (NaOH, KOH) والأملاح تامة الذوبان (NaCl).',
-        example: 'HCl(aq) \\to H^+(aq) + Cl^-(aq)',
+        example: 'HCl(aq) → H⁺(aq) + Cl⁻(aq)',
       },
       {
         term: 'الإلكتروليت الضعيف (Weak Electrolyte)',
         definition:
           'مادة تتأين في الماء تأيناً جزئياً صغيراً، ويبقى معظمها على هيئة جزيئات غير متفككة في حالة اتزان ديناميكي مع أيوناتها (مثل حمض الخليك CH3COOH، والأمونيا NH3).',
-        example: 'CH_3COOH(aq) \\rightleftharpoons CH_3COO^-(aq) + H^+(aq)',
+        example: 'CH₃COOH(aq) ⇌ CH₃COO⁻(aq) + H⁺(aq)',
       },
       {
         term: 'درجة التفكك الأيوني (Degree of Dissociation - α)',
@@ -319,7 +319,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'قانون أستفالد للتخفيف (Ostwald\'s Dilution Law)',
-        formula: 'K_a = \\frac{\\alpha^2 \\cdot C}{1 - \\alpha} \\approx \\alpha^2 \\cdot C',
+        formula: 'Ka = (α² · C) / (1 - α) ≈ α² · C',
         description:
           'عند ثبوت درجة الحرارة، تزداد درجة تفكك الإلكتروليت الضعيف (α) بزيادة التخفيف (نقصان التركيز C)، لتظل قيمة ثابت التأين Ka ثابتة.',
         variables: [
@@ -379,7 +379,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'معادلة التبادل البروتوني لبرونستد-لوري',
-        formula: 'HA + B \\rightleftharpoons A^- + HB^+',
+        formula: 'HA + B ⇌ A⁻ + HB⁺',
         description: 'الحمض HA يمنح بروتوناً ليصبح قاعدة مرافقة A⁻، والقاعدة B تستقبل بروتوناً لتصبح حمضاً مرافقاً HB⁺.',
         variables: [
           { symbol: 'HA / A⁻', meaning: 'حمض / قاعدته المرافقة' },
@@ -417,31 +417,31 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
         term: 'التأين الذاتي للماء (Autoionization of Water)',
         definition:
           'عملية يتفاعل فيها جزيئا ماء لإنتاج أيون الهيدرونيوم H3O⁺ وأيون الهيدروكسيد OH⁻.',
-        chemicalFormula: '2H_2O \\rightleftharpoons H_3O^+ + OH^-',
+        chemicalFormula: '2H₂O ⇌ H₃O⁺ + OH⁻',
       },
       {
         term: 'الحاصل الأيوني للماء (Kw)',
         definition:
           'حاصل ضرب تركيز أيوني [H⁺] و [OH⁻] في الماء النقي أو في أي محلول مائي عند 25°C، ويساوي قيمة ثابتة دائماً: 1.0 × 10⁻¹⁴.',
-        chemicalFormula: 'K_w = [H^+][OH^-] = 1.0 \\times 10^{-14}',
+        chemicalFormula: 'Kw = [H⁺][OH⁻] = 1.0 × 10⁻¹⁴',
       },
       {
         term: 'الرقم الهيدروجيني (pH)',
         definition:
           'اللوغاريتم السالب للأساس 10 لتركيز أيون الهيدروجين المولي في المحلول (pH = -log[H⁺]).',
-        chemicalFormula: 'pH = -\\log[H^+]',
+        chemicalFormula: 'pH = -log[H⁺]',
       },
       {
         term: 'الرقم الهيدروكسيدي (pOH)',
         definition:
           'اللوغاريتم السالب للأساس 10 لتركيز أيون الهيدروكسيد المولي في المحلول (pOH = -log[OH⁻]).',
-        chemicalFormula: 'pOH = -\\log[OH^-]',
+        chemicalFormula: 'pOH = -log[OH⁻]',
       },
     ],
     keyLaws: [
       {
         name: 'مقياس الحموضة والقاعدية والعلاقة الجامعة',
-        formula: 'pH + pOH = 14 \\quad (\\text{عند } 25^\\circ\\text{C})',
+        formula: 'pH + pOH = 14  (عند 25°C)',
         description: 'تقسيم المحاليل المائية حسب قيمة pH عند درجة حرارة 25°C:',
         variables: [
           { symbol: 'محلول حمضي', meaning: 'pH < 7 و [H⁺] > 10⁻⁷ M' },
@@ -506,7 +506,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'معادلة هندرسون - هاسلبالخ (Henderson-Hasselbalch Equation)',
-        formula: 'pH = pK_a + \\log \\left( \\frac{[Salt]}{[Acid]} \\right) = pK_a + \\log \\left( \\frac{[A^-]}{[HA]} \\right)',
+        formula: 'pH = pKa + log([Salt] / [Acid]) = pKa + log([A⁻] / [HA])',
         description: 'تستخدم لحساب الرقم الهيدروجيني للمحلول المنظم الحمضي المكون من حمض ضعيف وملحه.',
         variables: [
           { symbol: 'pH', meaning: 'الرقم الهيدروجيني للمحلول المنظم' },
@@ -567,7 +567,7 @@ export const CURRICULUM_LESSONS: LessonContent[] = [
     keyLaws: [
       {
         name: 'قانون المعايرة والتكافؤ الحجمي',
-        formula: 'M_a \\cdot V_a = M_b \\cdot V_b',
+        formula: 'Ma · Va = Mb · Vb',
         description: 'في معايرة حمض أحادي البروتون (مثل HCl) مع قاعدة أحادية الهيدروكسيل (مثل NaOH):',
         variables: [
           { symbol: 'Ma', meaning: 'مولارية الحمض', unit: 'mol / L' },

@@ -10,7 +10,7 @@ export class DashboardView {
 
   constructor(container: HTMLElement, onNavigateToLesson: (lessonId: string) => void) {
     this.element = document.createElement('main');
-    this.element.className = 'flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto w-full';
+    this.element.className = 'flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 max-w-5xl mx-auto w-full';
     container.appendChild(this.element);
 
     this.onNavigateToLesson = onNavigateToLesson;

@@ -1,4 +1,5 @@
 import { ChemistryCalculator, type CalculationResult } from '../services/chemistryCalculator';
+import { formatMathHtml } from '../utils/formulaFormatter';
 
 type CalcCategory = 'ph' | 'dilution' | 'titration' | 'ka' | 'balance';
 
@@ -45,29 +46,29 @@ export class ChemistryCalculatorView {
           </div>
         </div>
 
-        <!-- Category Selector Tabs -->
-        <div class="flex flex-wrap gap-2 p-1.5 bg-slate-100 rounded-2xl text-xs font-semibold">
-          <button data-cat="ph" class="calc-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl transition-all text-center ${
+        <!-- Category Selector Tabs (Scrollable on Mobile) -->
+        <div class="flex overflow-x-auto gap-1.5 p-1.5 bg-slate-100 rounded-2xl text-xs font-semibold no-scrollbar">
+          <button data-cat="ph" class="calc-tab-btn shrink-0 sm:flex-1 py-2.5 px-3 rounded-xl transition-all text-center cursor-pointer whitespace-nowrap ${
             this.currentCategory === 'ph' ? 'bg-white text-sky-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
           }">
             🔬 الرقم الهيدروجيني (pH)
           </button>
-          <button data-cat="dilution" class="calc-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl transition-all text-center ${
+          <button data-cat="dilution" class="calc-tab-btn shrink-0 sm:flex-1 py-2.5 px-3 rounded-xl transition-all text-center cursor-pointer whitespace-nowrap ${
             this.currentCategory === 'dilution' ? 'bg-white text-sky-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
           }">
             💧 تخفيف المحاليل والكتلة
           </button>
-          <button data-cat="titration" class="calc-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl transition-all text-center ${
+          <button data-cat="titration" class="calc-tab-btn shrink-0 sm:flex-1 py-2.5 px-3 rounded-xl transition-all text-center cursor-pointer whitespace-nowrap ${
             this.currentCategory === 'titration' ? 'bg-white text-sky-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
           }">
             🧪 المعايرة الحجمية
           </button>
-          <button data-cat="ka" class="calc-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl transition-all text-center ${
+          <button data-cat="ka" class="calc-tab-btn shrink-0 sm:flex-1 py-2.5 px-3 rounded-xl transition-all text-center cursor-pointer whitespace-nowrap ${
             this.currentCategory === 'ka' ? 'bg-white text-sky-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
           }">
             ⚡ ثابت التأين Ka (أستفالد)
           </button>
-          <button data-cat="balance" class="calc-tab-btn flex-1 min-w-[120px] py-2.5 px-3 rounded-xl transition-all text-center ${
+          <button data-cat="balance" class="calc-tab-btn shrink-0 sm:flex-1 py-2.5 px-3 rounded-xl transition-all text-center cursor-pointer whitespace-nowrap ${
             this.currentCategory === 'balance' ? 'bg-white text-sky-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
           }">
             ⚖️ مدقق موازنة المعادلات
@@ -75,9 +76,9 @@ export class ChemistryCalculatorView {
         </div>
 
         <!-- Main Workspace: Inputs (Left/Top) + Step-by-Step Results (Right/Bottom) -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6 items-start">
           <!-- Inputs Card (5 Cols) -->
-          <div class="lg:col-span-5 bg-white p-5 rounded-3xl border border-slate-200/90 shadow-2xs space-y-5">
+          <div class="lg:col-span-5 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200/90 shadow-2xs space-y-4 sm:space-y-5">
             ${this.renderCategoryInputs()}
           </div>
 
@@ -113,7 +114,7 @@ export class ChemistryCalculatorView {
                     </div>
                   </div>
                   <div class="bg-white px-3 py-1.5 rounded-xl border border-slate-200 text-xs font-mono font-bold text-indigo-700 dir-ltr shadow-2xs">
-                    ${this.currentResult.formula}
+                    ${formatMathHtml(this.currentResult.formula)}
                   </div>
                 </div>
 

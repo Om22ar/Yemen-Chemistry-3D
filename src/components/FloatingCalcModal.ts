@@ -9,7 +9,7 @@ export class FloatingCalcModal {
     // 1. Floating Action Button (Bottom Left)
     this.buttonEl = document.createElement('button');
     this.buttonEl.className =
-      'fixed bottom-5 left-5 z-40 w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center text-xl cursor-pointer';
+      'fixed bottom-3 sm:bottom-5 left-3 sm:left-5 z-30 w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-indigo-600 text-white shadow-lg hover:shadow-xl active:scale-95 transition-all flex items-center justify-center text-lg sm:text-xl cursor-pointer border border-white/20';
     this.buttonEl.title = 'حاسبة الكيمياء السريعة';
     this.buttonEl.innerHTML = '🧮';
     container.appendChild(this.buttonEl);
@@ -17,7 +17,7 @@ export class FloatingCalcModal {
     // 2. Modal Overlay & Popup Card
     this.modalEl = document.createElement('div');
     this.modalEl.className =
-      'fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4 hidden';
+      'fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 hidden';
     container.appendChild(this.modalEl);
 
     this.renderModal();
@@ -26,13 +26,13 @@ export class FloatingCalcModal {
 
   private renderModal() {
     this.modalEl.innerHTML = `
-      <div class="bg-white rounded-3xl max-w-sm w-full p-5 shadow-2xl border border-slate-200 text-slate-900 space-y-4 animate-in fade-in zoom-in-95 duration-150">
+      <div class="bg-white rounded-3xl max-w-sm w-[94vw] p-4 sm:p-5 shadow-2xl border border-slate-200 text-slate-900 space-y-4 animate-in fade-in zoom-in-95 duration-150">
         <div class="flex items-center justify-between pb-2 border-b border-slate-100">
           <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
             <span>🧮</span>
             <span>حاسبة الكيمياء السريعة</span>
           </div>
-          <button id="btn-close-quick-calc" class="text-slate-400 hover:text-slate-600 text-base font-bold">✕</button>
+          <button id="btn-close-quick-calc" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 text-sm font-bold cursor-pointer">✕</button>
         </div>
 
         <div class="space-y-3 text-xs">

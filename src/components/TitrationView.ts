@@ -39,37 +39,37 @@ export class TitrationView {
   private render() {
     this.element.innerHTML = `
       <!-- Top Lab Header Strip -->
-      <div class="absolute top-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-3 bg-white/95 backdrop-blur-md px-4 py-2.5 rounded-2xl border border-slate-200 shadow-sm text-xs">
-        <div class="flex items-center gap-3">
-          <span class="text-xl">🧪</span>
+      <div class="absolute top-3 sm:top-4 left-3 sm:left-4 right-3 sm:right-4 z-20 flex flex-wrap items-center justify-between gap-2.5 bg-white/95 backdrop-blur-md px-3 sm:px-4 py-2 sm:py-2.5 rounded-2xl border border-slate-200 shadow-sm text-xs">
+        <div class="flex items-center gap-2 sm:gap-3">
+          <span class="text-lg sm:text-xl shrink-0">🧪</span>
           <div>
-            <div class="font-bold text-slate-900 text-sm">
-              معمل المعايرة الافتراضي: معايرة حمض وقاعدة قوية
+            <div class="font-bold text-slate-900 text-xs sm:text-sm">
+              معمل المعايرة الافتراضي: حمض وقاعدة قوية
             </div>
-            <div class="text-[11px] text-slate-500 font-mono">
+            <div class="text-[10px] sm:text-[11px] text-slate-500 font-mono hidden sm:block">
               HCl (25 mL مجهول التركيز) + NaOH القياسي (0.100 M في السحاحة)
             </div>
           </div>
         </div>
 
         <!-- Indicators Selector -->
-        <div class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl">
-          <span class="text-slate-500 font-medium px-1">الدليل:</span>
-          <button data-ind="phenolphthalein" class="ind-btn px-2.5 py-1 rounded-lg font-medium transition-all ${
+        <div class="flex items-center gap-1 sm:gap-1.5 bg-slate-100 p-1 rounded-xl text-[11px] sm:text-xs overflow-x-auto max-w-full">
+          <span class="text-slate-500 font-medium px-1 hidden sm:inline">الدليل:</span>
+          <button data-ind="phenolphthalein" class="ind-btn px-2 sm:px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
             this.config.indicator === 'phenolphthalein'
               ? 'bg-white text-pink-700 shadow-2xs font-bold'
               : 'text-slate-600 hover:text-slate-900'
           }">
             فينولفثالين
           </button>
-          <button data-ind="bromothymol_blue" class="ind-btn px-2.5 py-1 rounded-lg font-medium transition-all ${
+          <button data-ind="bromothymol_blue" class="ind-btn px-2 sm:px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
             this.config.indicator === 'bromothymol_blue'
               ? 'bg-white text-emerald-700 shadow-2xs font-bold'
               : 'text-slate-600 hover:text-slate-900'
           }">
             أزرق بروموثيمول
           </button>
-          <button data-ind="methyl_orange" class="ind-btn px-2.5 py-1 rounded-lg font-medium transition-all ${
+          <button data-ind="methyl_orange" class="ind-btn px-2 sm:px-2.5 py-1 rounded-lg font-medium transition-all cursor-pointer whitespace-nowrap ${
             this.config.indicator === 'methyl_orange'
               ? 'bg-white text-amber-700 shadow-2xs font-bold'
               : 'text-slate-600 hover:text-slate-900'
@@ -79,37 +79,44 @@ export class TitrationView {
         </div>
       </div>
 
-      <!-- Live pH Meter & Volume Badge (Top-Left Floating) -->
-      <div class="absolute top-20 left-4 z-20 flex flex-col gap-2">
+      <!-- Touch Zoom & Reset Overlay Controls for Mobile/Touch -->
+      <div class="absolute top-16 sm:top-18 left-3 sm:left-4 z-20 flex flex-col gap-1.5 bg-white/90 backdrop-blur-md p-1.5 rounded-2xl border border-slate-200/90 shadow-sm">
+        <button id="btn-titr-zoom-in" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 text-base sm:text-lg font-bold shadow-2xs border border-slate-200 active:scale-95 transition-all cursor-pointer" title="تكبير">+</button>
+        <button id="btn-titr-zoom-out" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 text-base sm:text-lg font-bold shadow-2xs border border-slate-200 active:scale-95 transition-all cursor-pointer" title="تصغير">−</button>
+        <button id="btn-titr-reset-cam" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-xl bg-slate-50 hover:bg-slate-100 text-slate-800 text-xs sm:text-sm font-bold shadow-2xs border border-slate-200 active:scale-95 transition-all cursor-pointer" title="إعادة ضبط الكاميرا">↺</button>
+      </div>
+
+      <!-- Live pH Meter & Volume Badge (Top-Left Floating under touch buttons) -->
+      <div class="absolute top-36 sm:top-38 left-3 sm:left-4 z-20 flex flex-col gap-1.5 sm:gap-2">
         <!-- Digital pH Meter -->
-        <div class="bg-white/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200 shadow-sm min-w-[170px]">
-          <div class="text-[11px] font-bold text-slate-500 mb-1">مقياس الرقم الهيدروجيني</div>
-          <div class="flex items-baseline gap-2">
-            <span id="meter-ph-val" class="text-3xl font-bold font-mono-numbers text-slate-900">1.00</span>
-            <span id="meter-ph-status" class="text-xs font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-200">حمضي</span>
+        <div class="bg-white/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-sm min-w-[130px] sm:min-w-[150px]">
+          <div class="text-[10px] sm:text-[11px] font-bold text-slate-500 mb-0.5">مقياس pH</div>
+          <div class="flex items-baseline gap-1.5">
+            <span id="meter-ph-val" class="text-2xl sm:text-3xl font-bold font-mono-numbers text-slate-900">1.00</span>
+            <span id="meter-ph-status" class="text-[10px] sm:text-xs font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 rounded-md border border-rose-200">حمضي</span>
           </div>
           <!-- Color indicator preview -->
-          <div class="mt-2 flex items-center gap-2">
-            <span id="color-preview" class="w-4 h-4 rounded-full border border-slate-300 shadow-2xs" style="background-color: #f8fafc;"></span>
-            <span id="color-name" class="text-[10px] text-slate-500 font-medium">عديم اللون</span>
+          <div class="mt-1 flex items-center gap-1.5">
+            <span id="color-preview" class="w-3.5 h-3.5 rounded-full border border-slate-300 shadow-2xs" style="background-color: #f8fafc;"></span>
+            <span id="color-name" class="text-[10px] text-slate-500 font-medium truncate">عديم اللون</span>
           </div>
         </div>
 
         <!-- Volume Added Meter -->
-        <div class="bg-white/95 backdrop-blur-md p-3 rounded-2xl border border-slate-200 shadow-sm min-w-[170px]">
-          <div class="text-[11px] font-bold text-slate-500 mb-1">حجم NaOH المضاف</div>
+        <div class="bg-white/95 backdrop-blur-md p-2 sm:p-2.5 rounded-2xl border border-slate-200 shadow-sm min-w-[130px] sm:min-w-[150px]">
+          <div class="text-[10px] sm:text-[11px] font-bold text-slate-500 mb-0.5">حجم NaOH المستهلك</div>
           <div class="flex items-baseline gap-1">
-            <span id="meter-vol-val" class="text-2xl font-bold font-mono-numbers text-sky-700">0.00</span>
-            <span class="text-xs text-slate-500 font-medium">مل (mL)</span>
+            <span id="meter-vol-val" class="text-xl sm:text-2xl font-bold font-mono-numbers text-sky-700">0.00</span>
+            <span class="text-[10px] sm:text-xs text-slate-500 font-medium">مل (mL)</span>
           </div>
-          <div class="text-[10px] text-slate-400 font-mono mt-0.5" id="meter-drops-val">
+          <div class="text-[9px] sm:text-[10px] text-slate-400 font-mono mt-0.5" id="meter-drops-val">
             عدد القطرات: 0 قطرة
           </div>
         </div>
       </div>
 
       <!-- Live Titration Curve (Top-Right Floating) -->
-      <div class="absolute top-20 right-4 z-20 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 shadow-sm hidden md:block w-72">
+      <div class="absolute top-16 sm:top-18 right-3 sm:right-4 z-20 bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200 shadow-sm hidden md:block w-72">
         <div class="flex items-center justify-between text-xs font-bold text-slate-800 mb-2">
           <span>منحنى المعايرة الحجمية</span>
           <span class="text-[10px] text-sky-600 font-mono">pH مقابل الحجم</span>
@@ -126,37 +133,37 @@ export class TitrationView {
       <div id="titration-canvas-viewport" class="simulation-canvas-container flex-1"></div>
 
       <!-- Bottom Interactive Controls Dock -->
-      <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 w-[94%] max-w-2xl bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-lg p-3 sm:p-4">
-        <div class="flex flex-wrap items-center justify-between gap-3">
-          <div class="flex items-center gap-2">
+      <div class="absolute bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 z-20 w-[96%] max-w-2xl bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200 shadow-lg p-2.5 sm:p-4">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
+          <div class="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2">
             <!-- Add 1 Drop Button -->
-            <button id="btn-add-drop" class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs flex items-center gap-2">
-              <span class="text-base">💧</span>
-              <span>إضافة قطرة واحدة (+0.05 mL)</span>
+            <button id="btn-add-drop" class="col-span-2 sm:col-span-1 bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
+              <span class="text-sm sm:text-base">💧</span>
+              <span>إضافة قطرة (+0.05 mL)</span>
             </button>
 
             <!-- Auto Drip Toggle Button -->
-            <button id="btn-auto-drip" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold px-3 py-2.5 rounded-xl text-xs sm:text-sm transition-colors flex items-center gap-1.5">
+            <button id="btn-auto-drip" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition-colors flex items-center justify-center gap-1 cursor-pointer">
               <span>▶</span>
-              <span id="txt-auto-drip">تدفق مستمر</span>
+              <span id="txt-auto-drip" class="truncate">تدفق مستمر</span>
             </button>
 
             <!-- Undo Drop Button -->
-            <button id="btn-undo-drop" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-3 py-2.5 rounded-xl text-xs sm:text-sm transition-colors" title="تراجع عن قطرة">
+            <button id="btn-undo-drop" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition-colors cursor-pointer flex items-center justify-center" title="تراجع عن قطرة">
               ↩️
             </button>
           </div>
 
-          <div class="flex items-center gap-2">
+          <div class="grid grid-cols-3 sm:flex items-center gap-1.5 sm:gap-2 pt-1 sm:pt-0 border-t sm:border-t-0 border-slate-100">
             <!-- Reset Button -->
-            <button id="btn-reset-lab" class="bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-3 py-2.5 rounded-xl text-xs sm:text-sm transition-colors">
+            <button id="btn-reset-lab" class="col-span-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-semibold px-2.5 sm:px-3 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition-colors cursor-pointer">
               تصفير
             </button>
 
             <!-- Complete Experiment & Calculate Molarity -->
-            <button id="btn-evaluate" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs flex items-center gap-1.5">
+            <button id="btn-evaluate" class="col-span-2 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer">
               <span>📋</span>
-              <span>حساب التركيز والتقرير</span>
+              <span class="truncate">حساب التركيز والتقرير</span>
             </button>
           </div>
         </div>
@@ -297,6 +304,19 @@ export class TitrationView {
   }
 
   private bindEvents() {
+    // Touch Camera Controls
+    this.element.querySelector('#btn-titr-zoom-in')?.addEventListener('click', () => {
+      this.lab?.zoomIn();
+    });
+
+    this.element.querySelector('#btn-titr-zoom-out')?.addEventListener('click', () => {
+      this.lab?.zoomOut();
+    });
+
+    this.element.querySelector('#btn-titr-reset-cam')?.addEventListener('click', () => {
+      this.lab?.resetView();
+    });
+
     // Add Drop
     this.element.querySelector('#btn-add-drop')?.addEventListener('click', () => {
       this.lab?.addSingleDrop();

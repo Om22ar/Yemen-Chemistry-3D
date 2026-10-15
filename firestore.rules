@@ -6,6 +6,11 @@ service cloud.firestore {
       allow read, write: if false;
     }
 
+    // Health check connection test probe
+    match /test/connection {
+      allow get: if true;
+    }
+
     // Helper functions
     function isSignedIn() {
       return request.auth != null;
@@ -29,7 +34,7 @@ service cloud.firestore {
 
     // User Profile Validation
     function isValidUser(data) {
-      return data.id is string &&
+      return (('id' in data && data.id is string) || ('uid' in data && data.uid is string)) &&
              data.displayName is string && data.displayName.size() <= 100 &&
              data.totalPoints is number && data.totalPoints >= 0 &&
              data.level is number && data.level >= 1;
@@ -57,8 +62,8 @@ service cloud.firestore {
     match /users/{userId} {
       allow get: if isOwner(userId);
       allow list: if false; // Deny broad scraping
-      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().id == userId;
-      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && incoming().id == userId;
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && (('id' in incoming() && incoming().id == userId) || ('uid' in incoming() && incoming().uid == userId));
+      allow update: if isOwner(userId) && isValidId(userId) && isValidUser(incoming()) && (('id' in incoming() && incoming().id == userId) || ('uid' in incoming() && incoming().uid == userId));
       allow delete: if isOwner(userId);
 
       // Quiz Attempts sub-collection

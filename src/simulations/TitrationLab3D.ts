@@ -69,6 +69,7 @@ export class TitrationLab3D {
     this.renderer.toneMappingExposure = 1.1;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    this.renderer.domElement.style.touchAction = 'none';
 
     container.appendChild(this.renderer.domElement);
 
@@ -76,14 +77,18 @@ export class TitrationLab3D {
     this.camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 50);
     this.camera.position.set(0, 1.8, 3.6);
 
-    // OrbitControls
+    // OrbitControls with Touch Support
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
-    this.controls.dampingFactor = 0.06;
+    this.controls.dampingFactor = 0.08;
     this.controls.target.set(0, 1.1, 0);
-    this.controls.minDistance = 1.5;
-    this.controls.maxDistance = 6.0;
+    this.controls.minDistance = 1.3;
+    this.controls.maxDistance = 6.5;
     this.controls.maxPolarAngle = Math.PI / 2 + 0.05;
+    this.controls.touches = {
+      ONE: THREE.TOUCH.ROTATE,
+      TWO: THREE.TOUCH.DOLLY_PAN,
+    };
 
     // Studio Environment map
     const pmremGenerator = new THREE.PMREMGenerator(this.renderer);
@@ -503,6 +508,28 @@ export class TitrationLab3D {
 
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+  }
+
+  public zoomIn() {
+    const dir = new THREE.Vector3().subVectors(this.camera.position, this.controls.target).normalize();
+    const currentDist = this.camera.position.distanceTo(this.controls.target);
+    const newDist = Math.max(this.controls.minDistance, currentDist - 0.5);
+    this.camera.position.copy(this.controls.target).addScaledVector(dir, newDist);
+    this.controls.update();
+  }
+
+  public zoomOut() {
+    const dir = new THREE.Vector3().subVectors(this.camera.position, this.controls.target).normalize();
+    const currentDist = this.camera.position.distanceTo(this.controls.target);
+    const newDist = Math.min(this.controls.maxDistance, currentDist + 0.5);
+    this.camera.position.copy(this.controls.target).addScaledVector(dir, newDist);
+    this.controls.update();
+  }
+
+  public resetView() {
+    this.camera.position.set(0, 1.8, 3.6);
+    this.controls.target.set(0, 1.1, 0);
+    this.controls.update();
   }
 
   private onResize() {

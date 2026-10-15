@@ -78,7 +78,10 @@ class YemenChemistryApp {
       this.activeViewDisposer();
       this.activeViewDisposer = null;
     }
-    this.sidebar = null;
+    if (this.sidebar) {
+      this.sidebar.dispose();
+      this.sidebar = null;
+    }
     this.lessonViewer = null;
     this.mainContainer.innerHTML = '';
   }
@@ -130,6 +133,9 @@ class YemenChemistryApp {
         } else {
           this.switchTab('kinetics');
         }
+      },
+      () => {
+        this.sidebar?.openMobile();
       }
     );
   }
