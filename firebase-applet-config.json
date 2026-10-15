@@ -1,7 +1,7 @@
 {
   "projectId": "nice-cargo-dpt51",
   "appId": "1:583136664694:web:c6afe1bd74e499eb831357",
-  "apiKey": "AIzaSyCYoPhLQQ5eb5RGYEdicuvYw3S3_7JlB_8",
+  "apiKey": "REPLACE_WITH_FIREBASE_API_KEY",
   "authDomain": "nice-cargo-dpt51.firebaseapp.com",
   "firestoreDatabaseId": "ai-studio-6f7cbbf2-f7e6-423a-a0c2-12d62744f131",
   "storageBucket": "nice-cargo-dpt51.firebasestorage.app",
