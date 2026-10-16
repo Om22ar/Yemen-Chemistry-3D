@@ -6,7 +6,7 @@ export class DashboardView {
   private element: HTMLElement;
   private profile: StudentProfile;
   private onNavigateToLesson: (lessonId: string) => void;
-  private leaderboardFilter: 'all' | 'unit7' | 'unit8' = 'all';
+  private leaderboardFilter: 'all' | 'unit5' | 'unit6' | 'unit7' | 'unit8' = 'all';
 
   constructor(container: HTMLElement, onNavigateToLesson: (lessonId: string) => void) {
     this.element = document.createElement('main');
@@ -31,9 +31,15 @@ export class DashboardView {
     // Analyze mistakes
     for (const [topic, count] of Object.entries(mistakes)) {
       if (count >= 1) {
-        let lessonId = '7.1';
-        let lessonTitle = 'الدرس 7.1: المصطلحات الأساسية';
-        if (topic.includes('موازنة')) {
+        let lessonId = '5.1';
+        let lessonTitle = 'الدرس 5.1: مدخل لمجموعة الهالوجينات';
+        if (topic.includes('هالوجين') || topic.includes('إزاحة') || topic.includes('فلور')) {
+          lessonId = '5.2';
+          lessonTitle = 'الدرس 5.2: الخواص وتفاعلات الإزاحة التنافسية للهالوجينات';
+        } else if (topic.includes('خامل') || topic.includes('نبيل') || topic.includes('أرجون') || topic.includes('زينون')) {
+          lessonId = '6.1';
+          lessonTitle = 'الدرس 6.1: الغازات النبيلة وخمولها الكيميائي';
+        } else if (topic.includes('موازنة')) {
           lessonId = '7.1';
           lessonTitle = 'الدرس 7.1: المصطلحات وموازنة المعادلات الكيميائية';
         } else if (topic.includes('الهيدروجيني') || topic.includes('pH')) {
@@ -55,8 +61,8 @@ export class DashboardView {
       }
     }
 
-    // If student has done great in Unit 7 or 8, suggest advanced challenge
-    if (this.profile.completedLessons.length >= 5) {
+    // If student has done great in lessons, suggest advanced challenge
+    if (this.profile.completedLessons.length >= 4) {
       recs.push({
         type: 'challenge',
         topic: 'تحدي الاتزان والمعايرة الشامل',
@@ -77,8 +83,10 @@ export class DashboardView {
       name: this.profile.displayName || 'أنت (طالب متميز)',
       class: 'الصف الثاني الثانوي',
       totalPoints: this.profile.totalPoints,
-      unit7Points: Math.round(this.profile.totalPoints * 0.55),
-      unit8Points: Math.round(this.profile.totalPoints * 0.45),
+      unit5Points: Math.round(this.profile.totalPoints * 0.25),
+      unit6Points: Math.round(this.profile.totalPoints * 0.25),
+      unit7Points: Math.round(this.profile.totalPoints * 0.25),
+      unit8Points: Math.round(this.profile.totalPoints * 0.25),
       isCurrentUser: true,
     };
 
@@ -89,7 +97,11 @@ export class DashboardView {
     ];
 
     // Sort by filter
-    if (this.leaderboardFilter === 'unit7') {
+    if (this.leaderboardFilter === 'unit5') {
+      all.sort((a, b) => (b.unit5Points ?? 0) - (a.unit5Points ?? 0));
+    } else if (this.leaderboardFilter === 'unit6') {
+      all.sort((a, b) => (b.unit6Points ?? 0) - (a.unit6Points ?? 0));
+    } else if (this.leaderboardFilter === 'unit7') {
       all.sort((a, b) => b.unit7Points - a.unit7Points);
     } else if (this.leaderboardFilter === 'unit8') {
       all.sort((a, b) => b.unit8Points - a.unit8Points);
@@ -109,9 +121,17 @@ export class DashboardView {
   }
 
   private render() {
+    const unit5Total = CURRICULUM_LESSONS.filter((l) => l.unitId === 5).length;
+    const unit6Total = CURRICULUM_LESSONS.filter((l) => l.unitId === 6).length;
     const unit7Total = CURRICULUM_LESSONS.filter((l) => l.unitId === 7).length;
     const unit8Total = CURRICULUM_LESSONS.filter((l) => l.unitId === 8).length;
 
+    const unit5Done = CURRICULUM_LESSONS.filter(
+      (l) => l.unitId === 5 && this.profile.completedLessons.includes(l.id)
+    ).length;
+    const unit6Done = CURRICULUM_LESSONS.filter(
+      (l) => l.unitId === 6 && this.profile.completedLessons.includes(l.id)
+    ).length;
     const unit7Done = CURRICULUM_LESSONS.filter(
       (l) => l.unitId === 7 && this.profile.completedLessons.includes(l.id)
     ).length;
@@ -119,8 +139,10 @@ export class DashboardView {
       (l) => l.unitId === 8 && this.profile.completedLessons.includes(l.id)
     ).length;
 
-    const unit7Pct = Math.round((unit7Done / unit7Total) * 100);
-    const unit8Pct = Math.round((unit8Done / unit8Total) * 100);
+    const unit5Pct = unit5Total ? Math.round((unit5Done / unit5Total) * 100) : 0;
+    const unit6Pct = unit6Total ? Math.round((unit6Done / unit6Total) * 100) : 0;
+    const unit7Pct = unit7Total ? Math.round((unit7Done / unit7Total) * 100) : 0;
+    const unit8Pct = unit8Total ? Math.round((unit8Done / unit8Total) * 100) : 0;
 
     const recommendations = this.generateRecommendations();
     const leaderboard = this.getFilteredLeaderboard();
@@ -162,44 +184,84 @@ export class DashboardView {
           </div>
         </div>
 
-        <!-- Units Completion Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- Unit 7 -->
+        <!-- Units Completion Cards (All 4 Units) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Unit 5: الهالوجينات -->
           <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-2xs space-y-3">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
-                <span>📚</span>
-                <span>الوحدة 7: سرعة التفاعلات والاتزان</span>
+              <div class="flex items-center gap-2 font-bold text-xs sm:text-sm text-slate-900 truncate">
+                <span>🧂</span>
+                <span class="truncate">الوحدة 5: الهالوجينات</span>
               </div>
-              <span class="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-100">
-                ${unit7Done} من ${unit7Total} دروس
+              <span class="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200/60 shrink-0">
+                ${unit5Done} من ${unit5Total}
+              </span>
+            </div>
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+              <div class="bg-amber-500 h-full rounded-full transition-all duration-500" style="width: ${unit5Pct}%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+              <span>نسبة الإنجاز:</span>
+              <span class="font-bold text-slate-800 font-mono">${unit5Pct}%</span>
+            </div>
+          </div>
+
+          <!-- Unit 6: الغازات الخاملة -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-2xs space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 font-bold text-xs sm:text-sm text-slate-900 truncate">
+                <span>💡</span>
+                <span class="truncate">الوحدة 6: الغازات النبيلة</span>
+              </div>
+              <span class="text-xs font-mono font-bold text-indigo-700 bg-indigo-50 px-2.5 py-1 rounded-lg border border-indigo-200/60 shrink-0">
+                ${unit6Done} من ${unit6Total}
+              </span>
+            </div>
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+              <div class="bg-indigo-600 h-full rounded-full transition-all duration-500" style="width: ${unit6Pct}%"></div>
+            </div>
+            <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
+              <span>نسبة الإنجاز:</span>
+              <span class="font-bold text-slate-800 font-mono">${unit6Pct}%</span>
+            </div>
+          </div>
+
+          <!-- Unit 7: سرعة التفاعلات والاتزان -->
+          <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-2xs space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 font-bold text-xs sm:text-sm text-slate-900 truncate">
+                <span>📚</span>
+                <span class="truncate">الوحدة 7: سرعة التفاعلات</span>
+              </div>
+              <span class="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-lg border border-sky-100 shrink-0">
+                ${unit7Done} من ${unit7Total}
               </span>
             </div>
             <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
               <div class="bg-sky-600 h-full rounded-full transition-all duration-500" style="width: ${unit7Pct}%"></div>
             </div>
             <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
-              <span>نسبة الإنجاز الأكاديمي:</span>
+              <span>نسبة الإنجاز:</span>
               <span class="font-bold text-slate-800 font-mono">${unit7Pct}%</span>
             </div>
           </div>
 
-          <!-- Unit 8 -->
+          <!-- Unit 8: الاتزان الأيوني -->
           <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-2xs space-y-3">
             <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2 font-bold text-sm text-slate-900">
+              <div class="flex items-center gap-2 font-bold text-xs sm:text-sm text-slate-900 truncate">
                 <span>🧪</span>
-                <span>الوحدة 8: الاتزان الأيوني في المحاليل</span>
+                <span class="truncate">الوحدة 8: الاتزان الأيوني</span>
               </div>
-              <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">
-                ${unit8Done} من ${unit8Total} دروس
+              <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100 shrink-0">
+                ${unit8Done} من ${unit8Total}
               </span>
             </div>
             <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
               <div class="bg-emerald-600 h-full rounded-full transition-all duration-500" style="width: ${unit8Pct}%"></div>
             </div>
             <div class="flex items-center justify-between text-xs text-slate-500 font-medium">
-              <span>نسبة الإنجاز الأكاديمي:</span>
+              <span>نسبة الإنجاز:</span>
               <span class="font-bold text-slate-800 font-mono">${unit8Pct}%</span>
             </div>
           </div>
@@ -219,18 +281,28 @@ export class DashboardView {
             </div>
 
             <!-- Leaderboard Filter Tabs -->
-            <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
-              <button data-lb-filter="all" class="lb-filter-btn px-3 py-1.5 rounded-lg transition-all ${
+            <div class="flex flex-wrap items-center gap-1 bg-slate-100 p-1 rounded-xl text-xs font-semibold">
+              <button data-lb-filter="all" class="lb-filter-btn px-2.5 py-1.5 rounded-lg transition-all ${
                 this.leaderboardFilter === 'all' ? 'bg-white text-slate-900 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
               }">
                 الترتيب العام
               </button>
-              <button data-lb-filter="unit7" class="lb-filter-btn px-3 py-1.5 rounded-lg transition-all ${
+              <button data-lb-filter="unit5" class="lb-filter-btn px-2.5 py-1.5 rounded-lg transition-all ${
+                this.leaderboardFilter === 'unit5' ? 'bg-white text-amber-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
+              }">
+                الوحدة 5
+              </button>
+              <button data-lb-filter="unit6" class="lb-filter-btn px-2.5 py-1.5 rounded-lg transition-all ${
+                this.leaderboardFilter === 'unit6' ? 'bg-white text-indigo-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
+              }">
+                الوحدة 6
+              </button>
+              <button data-lb-filter="unit7" class="lb-filter-btn px-2.5 py-1.5 rounded-lg transition-all ${
                 this.leaderboardFilter === 'unit7' ? 'bg-white text-sky-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
               }">
                 الوحدة 7
               </button>
-              <button data-lb-filter="unit8" class="lb-filter-btn px-3 py-1.5 rounded-lg transition-all ${
+              <button data-lb-filter="unit8" class="lb-filter-btn px-2.5 py-1.5 rounded-lg transition-all ${
                 this.leaderboardFilter === 'unit8' ? 'bg-white text-emerald-800 shadow-2xs font-bold' : 'text-slate-600 hover:text-slate-900'
               }">
                 الوحدة 8
@@ -254,7 +326,11 @@ export class DashboardView {
                   .map((st) => {
                     const isYou = st.isCurrentUser;
                     const points =
-                      this.leaderboardFilter === 'unit7'
+                      this.leaderboardFilter === 'unit5'
+                        ? (st.unit5Points ?? 0)
+                        : this.leaderboardFilter === 'unit6'
+                        ? (st.unit6Points ?? 0)
+                        : this.leaderboardFilter === 'unit7'
                         ? st.unit7Points
                         : this.leaderboardFilter === 'unit8'
                         ? st.unit8Points
@@ -397,6 +473,8 @@ export class DashboardView {
     if (badge.id === 'chemistry_beginner') return pts >= 100;
     if (badge.id === 'chemistry_expert') return pts >= 500;
     if (badge.id === 'chemistry_genius') return pts >= 1000;
+    if (badge.id === 'halogens_master') return this.profile.completedLessons.filter((id) => id.startsWith('5.')).length >= 3;
+    if (badge.id === 'noble_gas_genius') return this.profile.completedLessons.filter((id) => id.startsWith('6.')).length >= 3;
     if (badge.id === 'equilibrium_master') return this.profile.completedLessons.filter((id) => id.startsWith('7.')).length >= 5;
     if (badge.id === 'ionic_expert') return this.profile.completedLessons.filter((id) => id.startsWith('8.')).length >= 5;
     if (badge.id === 'perfect_score') return pts >= 300;

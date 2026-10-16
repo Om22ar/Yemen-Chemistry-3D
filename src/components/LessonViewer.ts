@@ -87,43 +87,85 @@ export class LessonViewer {
         </div>
 
         <!-- Title & Subtitle Banner -->
-        <div class="bg-gradient-to-r from-sky-900 to-indigo-900 text-white p-6 rounded-2xl shadow-sm relative overflow-hidden">
-          <div class="relative z-10 space-y-2">
-            <span class="inline-block px-3 py-1 bg-white/15 backdrop-blur-xs text-sky-200 text-xs rounded-lg font-semibold">
-              المنهج اليمني · الثاني الثانوي
-            </span>
-            <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">
-              ${this.currentLesson.title}
-            </h1>
-            <p class="text-sky-100 text-sm max-w-2xl leading-relaxed">
-              ${this.currentLesson.subtitle}
-            </p>
-          </div>
-          <div class="absolute -left-8 -bottom-8 opacity-10 text-9xl select-none pointer-events-none">
-            ⚛️
-          </div>
-        </div>
+        ${(() => {
+          let bannerGradient = 'from-sky-900 to-indigo-900';
+          let badgeText = 'text-sky-200';
+          let watermark = '⚛️';
+          let simCardBg = 'bg-sky-50 border-sky-200/80';
+          let simBtnBg = 'bg-sky-600 hover:bg-sky-700';
+          let simIconBg = 'bg-sky-600';
+          let simTitle = 'محاكاة حركية التفاعلات ونظرية التصادم 3D';
+          let simDesc = 'شاهد الجزيئات والتصادمات الفعالة وتأثير درجة الحرارة والتركيز بصورة حية';
 
-        <!-- Quick 3D Simulation CTA Card -->
-        <div class="bg-sky-50 border border-sky-200/80 p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-sky-600 text-white flex items-center justify-center text-xl shrink-0">
-              👓
-            </div>
-            <div>
-              <div class="font-bold text-slate-900 text-sm">
-                محاكاة ثلاثية الأبعاد تفاعلية لهذا الدرس
+          if (this.currentLesson.unitId === 5) {
+            bannerGradient = 'from-amber-900 via-amber-950 to-orange-950';
+            badgeText = 'text-amber-200';
+            watermark = '🧂';
+            simCardBg = 'bg-amber-50/80 border-amber-200/80';
+            simBtnBg = 'bg-amber-600 hover:bg-amber-700';
+            simIconBg = 'bg-amber-600';
+            simTitle = 'محاكاة التفاعلات الحركية وتفاعلات الإزاحة 3D';
+            simDesc = 'شاهد حركة الجزيئات والتصادمات وتفاعلات الإزاحة الكيميائية بصورة ثلاثية الأبعاد';
+          } else if (this.currentLesson.unitId === 6) {
+            bannerGradient = 'from-indigo-950 via-purple-950 to-slate-900';
+            badgeText = 'text-indigo-200';
+            watermark = '💡';
+            simCardBg = 'bg-indigo-50/80 border-indigo-200/80';
+            simBtnBg = 'bg-indigo-600 hover:bg-indigo-700';
+            simIconBg = 'bg-indigo-600';
+            simTitle = 'محاكاة الذرات المنفردة والغازات النبيلة 3D';
+            simDesc = 'شاهد الحركة الحرة للذرات الأحادية وتوزيع طاقة الحركة في الحيز الفراغي';
+          } else if (this.currentLesson.unitId === 8) {
+            bannerGradient = 'from-teal-950 via-emerald-950 to-slate-900';
+            badgeText = 'text-emerald-200';
+            watermark = '🧪';
+            simCardBg = 'bg-emerald-50/80 border-emerald-200/80';
+            simBtnBg = 'bg-emerald-600 hover:bg-emerald-700';
+            simIconBg = 'bg-emerald-600';
+            simTitle = 'مختبر المعايرة والاتزان الأيوني الافتراضي';
+            simDesc = 'أجرِ تجارب المعايرة الدقيقة للوصول لنقطة التكافؤ وحساب التراكيز المجهولة';
+          }
+
+          return `
+            <div class="bg-gradient-to-r ${bannerGradient} text-white p-6 rounded-2xl shadow-sm relative overflow-hidden">
+              <div class="relative z-10 space-y-2">
+                <span class="inline-block px-3 py-1 bg-white/15 backdrop-blur-xs ${badgeText} text-xs rounded-lg font-semibold">
+                  المنهج اليمني · الثاني الثانوي العلمي
+                </span>
+                <h1 class="text-2xl sm:text-3xl font-bold tracking-tight">
+                  ${this.currentLesson.title}
+                </h1>
+                <p class="text-slate-100/90 text-sm max-w-2xl leading-relaxed">
+                  ${this.currentLesson.subtitle}
+                </p>
               </div>
-              <div class="text-xs text-slate-600">
-                شاهد الجزيئات والتصادمات وتغيرات الاتزان بصورة حية
+              <div class="absolute -left-8 -bottom-8 opacity-10 text-9xl select-none pointer-events-none">
+                ${watermark}
               </div>
             </div>
-          </div>
-          <button id="btn-launch-sim" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-xs shrink-0 flex items-center justify-center gap-2">
-            <span>تشغيل المحاكاة 3D</span>
-            <span>←</span>
-          </button>
-        </div>
+
+            <!-- Quick 3D Simulation CTA Card -->
+            <div class="${simCardBg} border p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg ${simIconBg} text-white flex items-center justify-center text-xl shrink-0">
+                  👓
+                </div>
+                <div>
+                  <div class="font-bold text-slate-900 text-sm">
+                    ${simTitle}
+                  </div>
+                  <div class="text-xs text-slate-600">
+                    ${simDesc}
+                  </div>
+                </div>
+              </div>
+              <button id="btn-launch-sim" class="w-full sm:w-auto ${simBtnBg} text-white font-bold px-4 py-2 rounded-xl text-xs transition-all shadow-xs shrink-0 flex items-center justify-center gap-2 cursor-pointer">
+                <span>تشغيل المحاكاة 3D</span>
+                <span>←</span>
+              </button>
+            </div>
+          `;
+        })()}
 
         <!-- Introduction Section -->
         <div class="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-2xs space-y-3">

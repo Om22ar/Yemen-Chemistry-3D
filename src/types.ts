@@ -1,10 +1,12 @@
 // Types definition for Yemen Grade 11 Chemistry 3D Platform
 
-export type UnitId = 7 | 8;
+export type UnitId = 5 | 6 | 7 | 8;
 
 export type ActiveTab = 'lessons' | 'kinetics' | 'titration' | 'calculator' | 'quiz' | 'dashboard';
 
 export type InteractiveType =
+  | 'halogens_displacement'
+  | 'noble_gases_discharge'
   | 'kinetics'
   | 'collision_theory'
   | 'activation_energy'
@@ -100,6 +102,8 @@ export interface LeaderboardStudent {
   name: string;
   class: string;
   totalPoints: number;
+  unit5Points?: number;
+  unit6Points?: number;
   unit7Points: number;
   unit8Points: number;
   medal?: string;

@@ -6,7 +6,7 @@ export class CurriculumSidebar {
   private element: HTMLElement;
   private mobileDrawerEl: HTMLElement;
   private onSelectLesson: (lesson: LessonContent) => void;
-  private currentLessonId: string = '7.1';
+  private currentLessonId: string = '5.1';
   private profile: StudentProfile;
   private isMobileOpen: boolean = false;
 
@@ -60,17 +60,23 @@ export class CurriculumSidebar {
   }
 
   private generateHtmlContent(isMobile = false): string {
+    const unit5Lessons = CURRICULUM_LESSONS.filter((l) => l.unitId === 5);
+    const unit6Lessons = CURRICULUM_LESSONS.filter((l) => l.unitId === 6);
     const unit7Lessons = CURRICULUM_LESSONS.filter((l) => l.unitId === 7);
     const unit8Lessons = CURRICULUM_LESSONS.filter((l) => l.unitId === 8);
 
+    const unit5Completed = unit5Lessons.filter((l) => this.profile.completedLessons.includes(l.id)).length;
+    const unit6Completed = unit6Lessons.filter((l) => this.profile.completedLessons.includes(l.id)).length;
     const unit7Completed = unit7Lessons.filter((l) => this.profile.completedLessons.includes(l.id)).length;
     const unit8Completed = unit8Lessons.filter((l) => this.profile.completedLessons.includes(l.id)).length;
 
-    const unit7Percent = Math.round((unit7Completed / unit7Lessons.length) * 100);
-    const unit8Percent = Math.round((unit8Completed / unit8Lessons.length) * 100);
+    const unit5Percent = unit5Lessons.length ? Math.round((unit5Completed / unit5Lessons.length) * 100) : 0;
+    const unit6Percent = unit6Lessons.length ? Math.round((unit6Completed / unit6Lessons.length) * 100) : 0;
+    const unit7Percent = unit7Lessons.length ? Math.round((unit7Completed / unit7Lessons.length) * 100) : 0;
+    const unit8Percent = unit8Lessons.length ? Math.round((unit8Completed / unit8Lessons.length) * 100) : 0;
 
     return `
-      <div class="p-4 border-b border-slate-100 bg-slate-50/60 flex items-center justify-between">
+      <div class="p-4 border-b border-slate-100 bg-slate-50/60 flex items-center justify-between sticky top-0 z-10 backdrop-blur-xs">
         <div>
           <div class="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-0.5">
             فهرس المنهج الدراسي
@@ -87,14 +93,112 @@ export class CurriculumSidebar {
       </div>
 
       <div class="p-4 space-y-6">
-        <!-- UNIT 7 -->
+        <!-- UNIT 5: الهالوجينات -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+              <span>🧂</span>
+              <span>الوحدة 5: الهالوجينات (VIIA)</span>
+            </span>
+            <span class="text-xs font-mono font-semibold text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200/60">${unit5Percent}%</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
+            <div class="bg-amber-500 h-full rounded-full transition-all duration-300" style="width: ${unit5Percent}%"></div>
+          </div>
+
+          <!-- Lesson Items -->
+          <div class="space-y-1">
+            ${unit5Lessons
+              .map((lesson) => {
+                const isSelected = lesson.id === this.currentLessonId;
+                const isDone = this.profile.completedLessons.includes(lesson.id);
+                return `
+                <button data-lesson-id="${lesson.id}" class="lesson-btn w-full text-right p-2.5 rounded-xl text-xs transition-all flex items-start gap-2.5 ${
+                  isSelected
+                    ? 'bg-amber-50 text-amber-950 font-bold border border-amber-200/80 shadow-2xs'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium'
+                }">
+                  <span class="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${
+                    isDone
+                      ? 'bg-emerald-500 text-white text-[10px]'
+                      : isSelected
+                      ? 'bg-amber-200 text-amber-900 text-[10px]'
+                      : 'border border-slate-300 text-transparent text-[8px]'
+                  }">
+                    ${isDone ? '✓' : '•'}
+                  </span>
+                  <div class="flex-1 leading-snug">
+                    <div class="flex items-center justify-between gap-1">
+                      <span>${lesson.id} ${lesson.title}</span>
+                      <span class="text-[10px] text-slate-400 font-mono">${lesson.readingTimeMin} د</span>
+                    </div>
+                  </div>
+                </button>
+              `;
+              })
+              .join('')}
+          </div>
+        </div>
+
+        <!-- UNIT 6: الغازات الخاملة -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
+              <span>💡</span>
+              <span>الوحدة 6: الغازات النبيلة (VIIIA)</span>
+            </span>
+            <span class="text-xs font-mono font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200/60">${unit6Percent}%</span>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden mb-3">
+            <div class="bg-indigo-600 h-full rounded-full transition-all duration-300" style="width: ${unit6Percent}%"></div>
+          </div>
+
+          <!-- Lesson Items -->
+          <div class="space-y-1">
+            ${unit6Lessons
+              .map((lesson) => {
+                const isSelected = lesson.id === this.currentLessonId;
+                const isDone = this.profile.completedLessons.includes(lesson.id);
+                return `
+                <button data-lesson-id="${lesson.id}" class="lesson-btn w-full text-right p-2.5 rounded-xl text-xs transition-all flex items-start gap-2.5 ${
+                  isSelected
+                    ? 'bg-indigo-50 text-indigo-950 font-bold border border-indigo-200/80 shadow-2xs'
+                    : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900 font-medium'
+                }">
+                  <span class="mt-0.5 w-4 h-4 rounded-full flex items-center justify-center shrink-0 ${
+                    isDone
+                      ? 'bg-emerald-500 text-white text-[10px]'
+                      : isSelected
+                      ? 'bg-indigo-200 text-indigo-900 text-[10px]'
+                      : 'border border-slate-300 text-transparent text-[8px]'
+                  }">
+                    ${isDone ? '✓' : '•'}
+                  </span>
+                  <div class="flex-1 leading-snug">
+                    <div class="flex items-center justify-between gap-1">
+                      <span>${lesson.id} ${lesson.title}</span>
+                      <span class="text-[10px] text-slate-400 font-mono">${lesson.readingTimeMin} د</span>
+                    </div>
+                  </div>
+                </button>
+              `;
+              })
+              .join('')}
+          </div>
+        </div>
+
+        <!-- UNIT 7: سرعة التفاعلات والاتزان -->
         <div>
           <div class="flex items-center justify-between mb-2">
             <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
               <span>📚</span>
               <span>الوحدة 7: سرعة التفاعلات والاتزان</span>
             </span>
-            <span class="text-xs font-mono font-semibold text-slate-500">${unit7Percent}%</span>
+            <span class="text-xs font-mono font-semibold text-sky-700 bg-sky-50 px-2 py-0.5 rounded-md border border-sky-200/60">${unit7Percent}%</span>
           </div>
 
           <!-- Progress Bar -->
@@ -136,14 +240,14 @@ export class CurriculumSidebar {
           </div>
         </div>
 
-        <!-- UNIT 8 -->
+        <!-- UNIT 8: الاتزان الأيوني -->
         <div>
           <div class="flex items-center justify-between mb-2">
             <span class="font-bold text-sm text-slate-800 flex items-center gap-1.5">
               <span>🧪</span>
-              <span>الوحدة 8: الاتزان الأيوني</span>
+              <span>الوحدة 8: الاتزان الأيوني في المحاليل</span>
             </span>
-            <span class="text-xs font-mono font-semibold text-slate-500">${unit8Percent}%</span>
+            <span class="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200/60">${unit8Percent}%</span>
           </div>
 
           <!-- Progress Bar -->
