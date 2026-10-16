@@ -1,5 +1,5 @@
 import { ChemistryCalculator, type CalculationResult } from '../services/chemistryCalculator';
-import { formatMathHtml } from '../utils/formulaFormatter';
+import { formatMathHtml, formatSolutionStep } from '../utils/formulaFormatter';
 
 type CalcCategory = 'ph' | 'dilution' | 'titration' | 'ka' | 'balance';
 
@@ -132,7 +132,7 @@ export class ChemistryCalculatorView {
                         (step) => `
                       <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-200/60 text-xs text-slate-800 font-mono-numbers">
                         <span class="text-sky-600 font-bold mt-0.5">•</span>
-                        <span>${step}</span>
+                        <span class="leading-relaxed">${formatSolutionStep(step)}</span>
                       </div>
                     `
                       )
@@ -186,12 +186,24 @@ export class ChemistryCalculatorView {
         return `
           <div class="space-y-4">
             <div class="font-bold text-sm text-slate-900">حساب الرقم الهيدروجيني (pH) والرقم الهيدروكسيدي (pOH)</div>
+
+            <!-- Mathematical Formula Banner -->
+            <div class="p-3 bg-gradient-to-r from-sky-50 to-indigo-50/60 rounded-2xl border border-sky-200 text-center space-y-1.5 shadow-2xs">
+              <div class="text-[11px] font-bold text-sky-950">القوانين المنهجية المعتمدة (عند 25°م):</div>
+              <div class="flex items-center justify-center gap-1.5 font-mono font-bold text-xs text-sky-950 dir-ltr flex-wrap">
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-sky-200 shadow-2xs">pH = -log[H⁺]</span>
+                <span class="text-slate-400">•</span>
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-sky-200 shadow-2xs">pOH = -log[OH⁻]</span>
+                <span class="text-slate-400">•</span>
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-sky-200 shadow-2xs">pH + pOH = 14</span>
+              </div>
+            </div>
             
             <div class="space-y-1.5">
               <label class="text-xs font-semibold text-slate-700">نوع التركيز المدخل:</label>
               <select id="sel-ph-mode" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-medium focus:ring-2 focus:ring-sky-500">
-                <option value="H">تركيز أيون الهيدروجين [H+] (مول/لتر)</option>
-                <option value="OH">تركيز أيون الهيدروكسيد [OH-] (مول/لتر)</option>
+                <option value="H">تركيز أيون الهيدروجين [H⁺] (مول/لتر)</option>
+                <option value="OH">تركيز أيون الهيدروكسيد [OH⁻] (مول/لتر)</option>
               </select>
             </div>
 
@@ -211,7 +223,7 @@ export class ChemistryCalculatorView {
               </div>
             </div>
 
-            <button id="btn-calc-ph" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">
+            <button id="btn-calc-ph" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">
               احسب pH و pOH بالخطوات
             </button>
           </div>
@@ -221,6 +233,16 @@ export class ChemistryCalculatorView {
         return `
           <div class="space-y-4">
             <div class="font-bold text-sm text-slate-900">تخفيف المحاليل وحساب الكتلة (M₁V₁ = M₂V₂)</div>
+
+            <!-- Mathematical Formula Banner -->
+            <div class="p-3 bg-gradient-to-r from-indigo-50 to-sky-50/60 rounded-2xl border border-indigo-200 text-center space-y-1.5 shadow-2xs">
+              <div class="text-[11px] font-bold text-indigo-950">قانون التخفيف والكتلة:</div>
+              <div class="flex items-center justify-center gap-2 font-mono font-bold text-xs text-indigo-950 dir-ltr flex-wrap">
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-indigo-200 shadow-2xs">M₁ · V₁ = M₂ · V₂</span>
+                <span class="text-slate-400">•</span>
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-indigo-200 shadow-2xs">m = M · V(L) · Mw</span>
+              </div>
+            </div>
 
             <div class="space-y-1.5">
               <label class="text-xs font-semibold text-slate-700">التركيز الابتدائي M₁ (مول/لتر):</label>
@@ -237,7 +259,7 @@ export class ChemistryCalculatorView {
               <input id="input-m2" type="number" step="any" value="0.5" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold dir-ltr" />
             </div>
 
-            <button id="btn-calc-dilution" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">
+            <button id="btn-calc-dilution" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">
               احسب الحجم النهائي وكمية الماء المطلوبة
             </button>
 
@@ -245,7 +267,7 @@ export class ChemistryCalculatorView {
               <div class="text-xs font-bold text-slate-800">أو احسب كتلة المادة المذابة m = M × V × Mw:</div>
               <div class="grid grid-cols-2 gap-2">
                 <input id="input-mass-mw" type="number" placeholder="الكتلة المولية Mw (مثال: 40 لـ NaOH)" value="40" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono dir-ltr" />
-                <button id="btn-calc-mass" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 rounded-xl text-xs">احسب الكتلة (g)</button>
+                <button id="btn-calc-mass" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 rounded-xl text-xs cursor-pointer">احسب الكتلة (g)</button>
               </div>
             </div>
           </div>
@@ -255,6 +277,16 @@ export class ChemistryCalculatorView {
         return `
           <div class="space-y-4">
             <div class="font-bold text-sm text-slate-900">حسابات المعايرة الحجمية وتحديد التركيز المجهول</div>
+
+            <!-- Mathematical Formula Banner -->
+            <div class="p-3 bg-gradient-to-r from-emerald-50 to-sky-50/60 rounded-2xl border border-emerald-200 text-center space-y-1.5 shadow-2xs">
+              <div class="text-[11px] font-bold text-emerald-950">قانون المعايرة والتكافؤ الحجمي:</div>
+              <div class="flex items-center justify-center gap-1.5 font-mono font-bold text-xs text-emerald-950 dir-ltr flex-wrap">
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-emerald-200 shadow-2xs">M<sub>حمض</sub> · V<sub>حمض</sub> = M<sub>قاعدة</sub> · V<sub>قاعدة</sub></span>
+                <span class="text-slate-400">⟹</span>
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-emerald-200 shadow-2xs">M<sub>مجهول</sub> = (M<sub>std</sub> · V<sub>std</sub>) ÷ V<sub>unk</sub></span>
+              </div>
+            </div>
 
             <div class="space-y-1.5">
               <label class="text-xs font-semibold text-slate-700">مولارية المحلول القياسي M_std (مول/لتر):</label>
@@ -276,7 +308,7 @@ export class ChemistryCalculatorView {
               <input id="input-ratio" type="number" step="any" value="1.0" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold dir-ltr" />
             </div>
 
-            <button id="btn-calc-titration" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">
+            <button id="btn-calc-titration" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">
               احسب مولارية المحلول المجهول M
             </button>
           </div>
@@ -287,6 +319,16 @@ export class ChemistryCalculatorView {
           <div class="space-y-4">
             <div class="font-bold text-sm text-slate-900">ثابت تأين الحمض الضعيف Ka وقانون أستفالد</div>
 
+            <!-- Mathematical Formula Banner -->
+            <div class="p-3 bg-gradient-to-r from-amber-50 to-indigo-50/60 rounded-2xl border border-amber-200 text-center space-y-1.5 shadow-2xs">
+              <div class="text-[11px] font-bold text-amber-950">قانون أستفالد للتخفيف وثابت التأين:</div>
+              <div class="flex items-center justify-center gap-1.5 font-mono font-bold text-xs text-amber-950 dir-ltr flex-wrap">
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-amber-200 shadow-2xs">Ka = (α² · C) ÷ (1 - α) ≈ α² · C</span>
+                <span class="text-slate-400">•</span>
+                <span class="bg-white px-2 py-0.5 rounded-lg border border-amber-200 shadow-2xs">α = √(Ka ÷ C)</span>
+              </div>
+            </div>
+
             <div class="space-y-1.5">
               <label class="text-xs font-semibold text-slate-700">التركيز المولي للحمض الضعيف C (مول/لتر):</label>
               <input id="input-ka-c" type="number" step="any" value="0.1" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold dir-ltr" />
@@ -295,10 +337,10 @@ export class ChemistryCalculatorView {
             <div class="space-y-1.5">
               <label class="text-xs font-semibold text-slate-700">درجة التفكك الأيوني α (قيمة كسرية بين 0 و 1):</label>
               <input id="input-ka-alpha" type="number" step="any" value="0.0132" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3.5 py-2 text-sm font-mono font-bold dir-ltr" />
-              <div class="text-[10px] text-slate-400 font-mono">مثال: لحمض الخليك CH₃COOH درجة التأين = 1.32% (أي 0.0132)</div>
+              <div class="text-[10px] text-slate-500 font-mono">مثال: لحمض الخليك CH₃COOH درجة التأين = 1.32% (أي 0.0132)</div>
             </div>
 
-            <button id="btn-calc-ka" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">
+            <button id="btn-calc-ka" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">
               احسب قيمة Ka و pKa بالخطوات
             </button>
           </div>
@@ -308,25 +350,28 @@ export class ChemistryCalculatorView {
         return `
           <div class="space-y-4">
             <div class="font-bold text-sm text-slate-900">المدقق الذكي لموازنة المعادلات الكيميائية</div>
-            <p class="text-xs text-slate-500 leading-relaxed">
-              افحص موازنة المعادلة بالتفصيل للتأكد من انطباق قانون بقاء الكتلة على أعداد ذرات كل عنصر.
-            </p>
+
+            <!-- Mathematical Formula Banner -->
+            <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200 text-center space-y-1 shadow-2xs">
+              <div class="text-[11px] font-bold text-slate-800">قانون بقاء الكتلة (لافوازييه):</div>
+              <div class="text-xs text-slate-600 font-medium">مجموع كتل وعدد ذرات المواد المتفاعلة = مجموع كتل وعدد ذرات المواد الناتجة</div>
+            </div>
 
             <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-3 font-mono text-xs">
               <div class="font-sans font-bold text-slate-800 text-xs">مثال تفاعل تصنيع غاز الأمونيا:</div>
               <div class="flex items-center gap-2">
-                <input id="eq-c1" type="number" min="1" value="1" class="w-12 text-center bg-white border border-slate-300 rounded-lg p-1.5 font-bold" />
-                <span>N₂</span>
+                <input id="eq-c1" type="number" min="1" value="1" class="w-12 text-center bg-white border border-slate-300 rounded-lg p-1.5 font-bold shadow-2xs" />
+                <span class="font-bold">N₂</span>
                 <span>+</span>
-                <input id="eq-c2" type="number" min="1" value="3" class="w-12 text-center bg-white border border-slate-300 rounded-lg p-1.5 font-bold" />
-                <span>H₂</span>
+                <input id="eq-c2" type="number" min="1" value="3" class="w-12 text-center bg-white border border-slate-300 rounded-lg p-1.5 font-bold shadow-2xs" />
+                <span class="font-bold">H₂</span>
                 <span>→</span>
-                <input id="eq-c3" type="number" min="1" value="2" class="w-12 text-center bg-white border border-slate-300 rounded-lg p-1.5 font-bold" />
-                <span>NH₃</span>
+                <input id="eq-c3" type="number" min="1" value="2" class="w-12 text-center bg-white border border-slate-300 rounded-lg p-1.5 font-bold shadow-2xs" />
+                <span class="font-bold">NH₃</span>
               </div>
             </div>
 
-            <button id="btn-verify-eq" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs">
+            <button id="btn-verify-eq" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">
               التحقق من صحة موازنة المعادلة
             </button>
           </div>

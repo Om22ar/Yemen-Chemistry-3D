@@ -1,6 +1,7 @@
 import { QUIZ_QUESTIONS } from '../data/curriculumData';
 import { StorageService } from '../services/firebase';
 import type { QuizQuestion, StudentProfile } from '../types';
+import { formatMathHtml, formatSolutionStep } from '../utils/formulaFormatter';
 
 export class QuizView {
   private element: HTMLElement;
@@ -82,7 +83,7 @@ export class QuizView {
               <span class="text-xs text-slate-500 font-medium">الوحدة ${currentQ.unitId}</span>
             </div>
             <h2 class="text-base sm:text-lg font-bold text-slate-900 leading-relaxed whitespace-pre-line">
-              ${currentQ.questionText}
+              ${formatMathHtml(currentQ.questionText)}
             </h2>
           </div>
 
@@ -101,14 +102,14 @@ export class QuizView {
               <div class="font-bold text-sm flex items-center gap-2">
                 <span>${isCorrect ? '✓ أحسنت! إجابة صحيحة (+50 نقطة XP)' : '✗ إجابة غير صحيحة، راجع الحل النموذجي:'}</span>
               </div>
-              <p class="text-xs sm:text-sm leading-relaxed">${currentQ.explanation}</p>
+              <p class="text-xs sm:text-sm leading-relaxed">${formatMathHtml(currentQ.explanation)}</p>
               ${
                 currentQ.formulaSteps
                   ? `
-                <div class="pt-2 border-t border-slate-200/60 space-y-1">
+                <div class="pt-2 border-t border-slate-200/60 space-y-1.5">
                   <div class="text-xs font-bold text-slate-700">خطوات الحل التفصيلية:</div>
-                  <ol class="list-decimal list-inside text-xs space-y-1 font-mono-numbers">
-                    ${currentQ.formulaSteps.map((step) => `<li>${step}</li>`).join('')}
+                  <ol class="list-decimal list-inside text-xs space-y-1.5 font-mono-numbers">
+                    ${currentQ.formulaSteps.map((step) => `<li class="leading-relaxed">${formatSolutionStep(step)}</li>`).join('')}
                   </ol>
                 </div>
               `
@@ -174,7 +175,7 @@ export class QuizView {
               return `
               <label class="flex items-center gap-3 p-3.5 rounded-xl border cursor-pointer transition-all ${itemClass}">
                 <input type="radio" name="opt-${q.id}" value="${opt}" ${isChecked ? 'checked' : ''} ${isSubmitted ? 'disabled' : ''} class="w-4 h-4 accent-sky-600" />
-                <span class="text-xs sm:text-sm flex-1">${opt}</span>
+                <span class="text-xs sm:text-sm flex-1">${formatMathHtml(opt)}</span>
               </label>
             `;
             })

@@ -82,6 +82,10 @@ export const googleProvider = new GoogleAuthProvider();
 
 // Validate connection per skill requirement
 async function testConnection() {
+  if (!firebaseConfig.apiKey || firebaseConfig.apiKey.includes('REPLACE_')) {
+    console.info('Firebase API key is a placeholder; operating seamlessly in local student storage mode.');
+    return;
+  }
   try {
     await getDocFromServer(doc(db, 'test', 'connection'));
   } catch (error) {

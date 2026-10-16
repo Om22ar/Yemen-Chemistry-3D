@@ -1,6 +1,11 @@
 import { StorageService } from '../services/firebase';
 import type { LessonContent, StudentProfile } from '../types';
-import { renderStudentFriendlyFormula, formatMathHtml } from '../utils/formulaFormatter';
+import {
+  renderStudentFriendlyFormula,
+  formatMathHtml,
+  renderComprehensiveLawCard,
+  formatSolutionStep,
+} from '../utils/formulaFormatter';
 
 export class LessonViewer {
   private element: HTMLElement;
@@ -173,30 +178,7 @@ export class LessonViewer {
           </h2>
           <div class="space-y-4">
             ${this.currentLesson.keyLaws
-              .map(
-                (law) => `
-              <div class="p-5 rounded-xl bg-gradient-to-br from-slate-50 to-indigo-50/30 border border-indigo-100">
-                <div class="font-bold text-sm text-indigo-950 mb-2">${law.name}</div>
-                <div class="bg-white p-3.5 rounded-xl border border-indigo-200 text-center font-mono font-bold text-base sm:text-lg text-indigo-700 shadow-2xs mb-3 dir-ltr">
-                  ${formatMathHtml(law.formula)}
-                </div>
-                <p class="text-xs sm:text-sm text-slate-600 mb-3">${law.description}</p>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                  ${law.variables
-                    .map(
-                      (v) => `
-                    <div class="flex items-center gap-2 bg-white/80 p-2 rounded-lg border border-slate-200">
-                      <span class="font-mono font-bold text-indigo-700 shrink-0">${v.symbol}:</span>
-                      <span class="text-slate-700">${v.meaning} ${v.unit ? `(${v.unit})` : ''}</span>
-                    </div>
-                  `
-                    )
-                    .join('')}
-                </div>
-              </div>
-            `
-              )
+              .map((law) => renderComprehensiveLawCard(law))
               .join('')}
           </div>
         </div>
@@ -211,17 +193,25 @@ export class LessonViewer {
             ${this.currentLesson.practicalExamples
               .map(
                 (ex) => `
-              <div class="p-4 rounded-xl bg-amber-50/50 border border-amber-200">
-                <div class="font-bold text-xs text-amber-900 mb-1 flex items-center gap-1.5">
-                  <span>❓</span>
-                  <span>${ex.title}</span>
+              <div class="p-4 sm:p-5 rounded-2xl bg-amber-50/50 border border-amber-200/80 space-y-2.5">
+                <div class="font-bold text-xs text-amber-950 flex items-center justify-between pb-1.5 border-b border-amber-200/60">
+                  <span class="flex items-center gap-1.5">
+                    <span>❓</span>
+                    <span>${ex.title}</span>
+                  </span>
+                  <span class="text-[10px] bg-white text-amber-800 px-2 py-0.5 rounded-md border border-amber-200 font-semibold">تطبيق منهجي</span>
                 </div>
-                <div class="text-xs sm:text-sm text-slate-800 mb-2 font-medium leading-relaxed">
-                  ${ex.problem}
+                <div class="text-xs sm:text-sm text-slate-800 font-medium leading-relaxed">
+                  ${formatMathHtml(ex.problem)}
                 </div>
-                <div class="p-3 bg-white rounded-lg border border-amber-300/80 text-xs sm:text-sm text-slate-900 leading-relaxed font-mono-numbers">
-                  <span class="font-bold text-emerald-700 font-sans">✓ خطوات الحل: </span>
-                  ${ex.solution}
+                <div class="p-3.5 bg-white rounded-xl border border-amber-300/80 text-xs sm:text-sm text-slate-900 leading-relaxed font-mono-numbers shadow-2xs">
+                  <div class="font-bold text-emerald-800 font-sans mb-1.5 flex items-center gap-1.5 text-xs">
+                    <span>✓</span>
+                    <span>خطوات التعويض والحل النموذجي:</span>
+                  </div>
+                  <div class="text-slate-800 leading-relaxed">
+                    ${formatSolutionStep(ex.solution)}
+                  </div>
                 </div>
               </div>
             `
@@ -242,7 +232,7 @@ export class LessonViewer {
                 (pt) => `
               <li class="flex items-start gap-2">
                 <span class="text-emerald-600 font-bold mt-0.5">•</span>
-                <span>${pt}</span>
+                <span>${formatMathHtml(pt)}</span>
               </li>
             `
               )

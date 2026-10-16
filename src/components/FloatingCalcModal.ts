@@ -35,36 +35,63 @@ export class FloatingCalcModal {
           <button id="btn-close-quick-calc" class="w-7 h-7 flex items-center justify-center rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-700 text-sm font-bold cursor-pointer">✕</button>
         </div>
 
-        <div class="space-y-3 text-xs">
-          <div>
-            <label class="font-semibold text-slate-700 block mb-1">احسب pH من تركيز [H⁺] (مول/لتر):</label>
-            <div class="flex items-center gap-2">
-              <input id="quick-input-h" type="number" step="any" value="0.01" class="flex-1 bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-sm font-mono font-bold dir-ltr" />
-              <button id="btn-quick-calc-ph" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-3 py-2 rounded-xl text-xs transition-colors">احسب</button>
+        <div class="space-y-3.5 text-xs">
+          <!-- 1. pH Formula Section -->
+          <div class="bg-sky-50/50 p-3 rounded-2xl border border-sky-100 space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="font-bold text-sky-950 block">حساب الرقم الهيدروجيني pH:</label>
+              <span class="bg-white px-2 py-0.5 rounded-md border border-sky-200 font-mono text-[10px] font-bold text-sky-800 dir-ltr shadow-2xs">
+                pH = -log[H⁺]
+              </span>
             </div>
-            <div id="quick-ph-result" class="mt-2 p-2.5 rounded-xl bg-sky-50 text-sky-950 font-mono font-bold text-center border border-sky-100">
-              pH = 2.00 · pOH = 12.00
+            <div class="flex items-center gap-2">
+              <div class="relative flex-1">
+                <input id="quick-input-h" type="number" step="any" value="0.01" placeholder="[H⁺]" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-1.5 text-xs font-mono font-bold dir-ltr shadow-2xs" />
+                <span class="absolute left-2.5 top-1.5 text-[10px] text-slate-400 font-mono">M</span>
+              </div>
+              <button id="btn-quick-calc-ph" class="bg-sky-600 hover:bg-sky-700 active:scale-95 text-white font-bold px-3 py-1.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">احسب</button>
+            </div>
+            <div id="quick-ph-result" class="p-2.5 rounded-xl bg-white text-sky-950 border border-sky-200 shadow-2xs text-center space-y-1">
+              <div class="font-mono text-xs font-bold text-sky-900 dir-ltr">pH = 2.00  |  pOH = 12.00</div>
+              <div class="text-[10px] text-slate-500 font-medium">محلول حمضي قوي (pH &lt; 7)</div>
             </div>
           </div>
 
-          <div class="pt-2 border-t border-slate-100">
-            <label class="font-semibold text-slate-700 block mb-1">تخفيف سريع M₁V₁ = M₂V₂ (لإيجاد V₂):</label>
-            <div class="grid grid-cols-3 gap-1.5 font-mono text-center">
-              <input id="quick-m1" type="number" step="any" placeholder="M₁" value="1.0" class="bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold" />
-              <input id="quick-v1" type="number" step="any" placeholder="V₁ (mL)" value="25" class="bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold" />
-              <input id="quick-m2" type="number" step="any" placeholder="M₂" value="0.1" class="bg-slate-50 border border-slate-300 rounded-lg p-1.5 text-xs font-bold" />
+          <!-- 2. Dilution Formula Section -->
+          <div class="bg-indigo-50/50 p-3 rounded-2xl border border-indigo-100 space-y-2">
+            <div class="flex items-center justify-between">
+              <label class="font-bold text-indigo-950 block">تخفيف المحاليل المائية:</label>
+              <span class="bg-white px-2 py-0.5 rounded-md border border-indigo-200 font-mono text-[10px] font-bold text-indigo-800 dir-ltr shadow-2xs">
+                M₁ · V₁ = M₂ · V₂
+              </span>
             </div>
-            <button id="btn-quick-calc-dilute" class="w-full mt-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-1.5 rounded-xl text-xs transition-colors">
-              احسب حجم التخفيف V₂
+            <div class="grid grid-cols-3 gap-1.5 font-mono text-center">
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">M₁ (قبل)</span>
+                <input id="quick-m1" type="number" step="any" placeholder="M₁" value="1.0" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs font-bold shadow-2xs text-center" />
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">V₁ (mL)</span>
+                <input id="quick-v1" type="number" step="any" placeholder="V₁" value="25" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs font-bold shadow-2xs text-center" />
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 block mb-0.5">M₂ (بعد)</span>
+                <input id="quick-m2" type="number" step="any" placeholder="M₂" value="0.1" class="w-full bg-white border border-slate-300 rounded-lg p-1.5 text-xs font-bold shadow-2xs text-center" />
+              </div>
+            </div>
+            <button id="btn-quick-calc-dilute" class="w-full bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-bold py-1.5 rounded-xl text-xs transition-all shadow-xs cursor-pointer">
+              احسب الحجم النهائي V₂
             </button>
-            <div id="quick-dilute-result" class="mt-2 p-2 rounded-xl bg-indigo-50 text-indigo-950 font-mono font-bold text-center border border-indigo-100 text-xs">
-              V₂ = 250.00 mL (ماء مضاف: 225 mL)
+            <div id="quick-dilute-result" class="p-2.5 rounded-xl bg-white text-indigo-950 border border-indigo-200 shadow-2xs text-center space-y-1">
+              <div class="font-mono text-xs font-bold text-indigo-900 dir-ltr">V₂ = (1.0 × 25) ÷ 0.1 = 250.00 mL</div>
+              <div class="text-[10px] text-slate-600 font-medium">حجم الماء الواجب إضافته = <strong class="text-indigo-800 font-mono">225.0 mL</strong></div>
             </div>
           </div>
         </div>
 
-        <button id="btn-open-full-calc" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2 rounded-xl text-xs transition-colors">
-          الانتقال للحاسبة الكيميائية الكاملة ←
+        <button id="btn-open-full-calc" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold py-2.5 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-center gap-1.5">
+          <span>الانتقال للحاسبة الكيميائية الشاملة</span>
+          <span>←</span>
         </button>
       </div>
     `;
@@ -93,11 +120,15 @@ export class FloatingCalcModal {
         try {
           const res = ChemistryCalculator.calculatePH(val);
           const poh = (14 - Number(res.result)).toFixed(2);
-          resEl.textContent = `pH = ${res.result} · pOH = ${poh}`;
-          resEl.className = 'mt-2 p-2.5 rounded-xl bg-sky-50 text-sky-950 font-mono font-bold text-center border border-sky-100';
+          const nature = Number(res.result) < 6.8 ? 'محلول حمضي' : Number(res.result) > 7.2 ? 'محلول قاعدي' : 'محلول متعادل';
+          resEl.innerHTML = `
+            <div class="font-mono text-xs font-bold text-sky-900 dir-ltr">pH = ${res.result}  |  pOH = ${poh}</div>
+            <div class="text-[10px] text-slate-600 font-medium">${nature} (عند 25°م)</div>
+          `;
+          resEl.className = 'p-2.5 rounded-xl bg-white text-sky-950 border border-sky-200 shadow-2xs text-center space-y-1';
         } catch (e: any) {
           resEl.textContent = e.message;
-          resEl.className = 'mt-2 p-2.5 rounded-xl bg-rose-50 text-rose-900 font-sans text-xs text-center border border-rose-200';
+          resEl.className = 'p-2 rounded-xl bg-rose-50 text-rose-900 font-sans text-xs text-center border border-rose-200';
         }
       }
     });
@@ -112,11 +143,14 @@ export class FloatingCalcModal {
         try {
           const res = ChemistryCalculator.dilutionFormula(m1, v1, m2);
           const water = Number(res.result) - v1;
-          resEl.textContent = `V₂ = ${res.result} mL (ماء مضاف: ${water.toFixed(1)} mL)`;
-          resEl.className = 'mt-2 p-2 rounded-xl bg-indigo-50 text-indigo-950 font-mono font-bold text-center border border-indigo-100 text-xs';
+          resEl.innerHTML = `
+            <div class="font-mono text-xs font-bold text-indigo-900 dir-ltr">V₂ = (${m1} × ${v1}) ÷ ${m2} = ${res.result} mL</div>
+            <div class="text-[10px] text-slate-600 font-medium">حجم الماء المضاف = <strong class="text-indigo-800 font-mono">${water.toFixed(1)} mL</strong></div>
+          `;
+          resEl.className = 'p-2.5 rounded-xl bg-white text-indigo-950 border border-indigo-200 shadow-2xs text-center space-y-1';
         } catch (e: any) {
           resEl.textContent = e.message;
-          resEl.className = 'mt-2 p-2 rounded-xl bg-rose-50 text-rose-900 font-sans text-xs text-center border border-rose-200';
+          resEl.className = 'p-2 rounded-xl bg-rose-50 text-rose-900 font-sans text-xs text-center border border-rose-200';
         }
       }
     });

@@ -148,6 +148,52 @@ export class KineticsView {
               </div>
             </div>
           </div>
+
+          <!-- Physics & Chemistry Simulation Laws (Pedagogical Math Bar) -->
+          <div class="mt-3 pt-2.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5 text-xs text-slate-700">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <span class="font-bold text-indigo-950 flex items-center gap-1.5 text-xs">
+                <span>📐</span>
+                <span>القوانين الحاكمة للمحاكاة:</span>
+              </span>
+              
+              <!-- 1. Velocity Temperature Relation -->
+              <div class="inline-flex items-center gap-1.5 bg-indigo-50/80 text-indigo-950 border border-indigo-200 px-2.5 py-1 rounded-xl font-mono text-xs shadow-2xs">
+                <span class="font-bold">v</span>
+                <span>=</span>
+                <span>v₀ ·</span>
+                <span class="inline-flex items-center gap-0.5 font-bold">
+                  <span>√</span>
+                  <span class="border-t-2 border-indigo-500 px-1 inline-flex flex-col items-center leading-none text-[10px]">
+                    <span class="border-b border-indigo-300 pb-0.5">T (كلفن)</span>
+                    <span class="pt-0.5">298 K</span>
+                  </span>
+                </span>
+              </div>
+
+              <!-- 2. Collision Energy Activation Requirement -->
+              <div class="inline-flex items-center gap-1 bg-amber-50/80 text-amber-950 border border-amber-200 px-2.5 py-1 rounded-xl font-mono text-xs font-bold shadow-2xs">
+                <span>E<sub>تصادم</sub></span>
+                <span class="text-amber-700">≥</span>
+                <span>E<sub>a</sub></span>
+                <span class="font-sans text-[10px] text-amber-800 font-semibold mr-1">(طاقة التنشيط)</span>
+              </div>
+
+              <!-- 3. Equilibrium Law (Haber-Bosch Kc) -->
+              <div class="inline-flex items-center gap-1.5 bg-emerald-50/80 text-emerald-950 border border-emerald-200 px-2.5 py-1 rounded-xl font-mono text-xs shadow-2xs dir-ltr">
+                <span class="font-extrabold text-emerald-800">Kc</span>
+                <span>=</span>
+                <div class="inline-flex flex-col items-center justify-center text-center leading-tight">
+                  <span class="border-b-2 border-emerald-400 pb-0.5 px-1 font-bold text-emerald-900">[NH₃]²</span>
+                  <span class="pt-0.5 px-1 font-bold text-slate-700 text-[10px]">[N₂] · [H₂]³</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-slate-500 font-medium bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/60">
+              💡 زيادة الحرارة تزيد طاقة الجزيئات، وزيادة الضغط تزيح نحو الطرف الأقل مولات (غاز NH₃)
+            </div>
+          </div>
         </div>
       </div>
     `;

@@ -428,13 +428,42 @@ export class TitrationView {
       </div>
 
       <!-- Calculation Steps -->
-      <div class="p-4 bg-indigo-50/70 rounded-2xl border border-indigo-200 text-xs space-y-1.5 font-mono-numbers">
-        <div class="font-bold text-indigo-950 font-sans text-xs">📐 معادلة حساب التركيز المجهول:</div>
-        <div class="font-mono font-semibold text-indigo-800 dir-ltr text-center py-1">
-          M_a = (M_b × V_b) / V_a
+      <div class="p-4 bg-gradient-to-br from-indigo-50/90 to-sky-50/90 rounded-2xl border border-indigo-200 text-xs space-y-2.5">
+        <div class="flex items-center justify-between border-b border-indigo-100 pb-1.5">
+          <span class="font-bold text-indigo-950 text-xs flex items-center gap-1.5">
+            <span>📐</span>
+            <span>خطوات الحساب الكيميائي للتركيز المجهول (Ma)</span>
+          </span>
+          <span class="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-md font-mono text-[11px] font-bold">
+            M₁V₁ = M₂V₂
+          </span>
         </div>
-        <div class="font-mono text-slate-700 dir-ltr text-center text-xs">
-          M_a = (0.100 × ${Vb.toFixed(2)}) / ${Va.toFixed(1)} = <span class="font-bold text-slate-900">${calculatedMolarity.toFixed(4)} M</span>
+
+        <div class="bg-white p-3 rounded-xl border border-indigo-100 shadow-2xs space-y-2 text-center">
+          <div class="text-[11px] text-slate-500 font-medium">قانون المعايرة والتكافؤ عند نقطة التعادل:</div>
+          <div class="flex items-center justify-center gap-2 font-mono font-bold text-sm sm:text-base dir-ltr text-slate-900">
+            <span class="text-sky-800 font-extrabold">M<sub>حمض</sub></span>
+            <span>=</span>
+            <div class="inline-flex flex-col items-center justify-center leading-tight">
+              <span class="border-b-2 border-indigo-400 pb-0.5 px-2 font-bold text-indigo-800">M<sub>قاعدة</sub> × V<sub>قاعدة</sub></span>
+              <span class="pt-0.5 px-2 font-bold text-slate-700">V<sub>حمض</sub></span>
+            </div>
+          </div>
+          
+          <div class="pt-1.5 border-t border-slate-100 text-[11px] text-slate-600 font-mono dir-ltr flex items-center justify-center gap-2">
+            <span>M<sub>a</sub></span>
+            <span>=</span>
+            <div class="inline-flex flex-col items-center justify-center leading-tight">
+              <span class="border-b border-slate-300 px-1 font-bold">0.100 M × ${Vb.toFixed(2)} mL</span>
+              <span class="px-1 font-bold text-slate-700">${Va.toFixed(1)} mL</span>
+            </div>
+            <span>=</span>
+            <span class="bg-emerald-50 text-emerald-800 border border-emerald-300 px-2 py-0.5 rounded-md font-bold text-xs">${calculatedMolarity.toFixed(4)} M</span>
+          </div>
+        </div>
+
+        <div class="text-[11px] text-slate-600 bg-white/70 p-2 rounded-lg border border-indigo-100/60 leading-relaxed">
+          <span class="font-bold text-indigo-900">💡 الشرح:</span> بما أن حمض HCl وقاعدة NaOH يتفاعلان بنسبة مولية (1 : 1)، فإن عدد مولات الحمض يساوي تماماً عدد مولات القاعدة عند نقطة التكافؤ.
         </div>
       </div>
 
